@@ -1,8 +1,18 @@
-import Image from "next/image";
-import WeatherComponent from "@/components/test";
+// "use client";
+import WeatherComponent from "@/components/weather";
+import CitySearcher from "@/components/cities";
+// import { useState } from "react";
 
+// todo: form with search params for city input ====================================================
 export default function Home() {
-  return <WeatherComponent />;
+  return (
+    <div className="grid grid-rows[1fr_2fr_1fr]">
+      <main className="flex flex-col items-center justify-center gap-8 p-8">
+        {/* <CitySearcher /> */}
+        <WeatherComponent city="schliengen" />
+      </main>
+    </div>
+  );
 }
 
 /*
