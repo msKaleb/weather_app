@@ -6,7 +6,7 @@ import { cityType } from "@/lib/utils";
 export default function CitySearcher() {
   const [cities, setCities] = useState<cityType[]>([]);
   useEffect(() => {
-    fetch("/cities.json")
+    fetch("@/data/cities.json")
       .then((response) => response.json())
       .then((data) => setCities(data))
       .catch((error) => console.error("Error fetching cities:", error));
