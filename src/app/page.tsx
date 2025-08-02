@@ -1,15 +1,23 @@
-// "use client";
-import WeatherComponent from "@/components/weather";
-import CitySearcher from "@/components/cities";
-// import { useState } from "react";
+import CitySearch from "@/components/CitySearch";
+import SearchBar from "@/components/SearchBar";
+import WeatherComponent from "@/components/WeatherComponent";
 
 // todo: form with search params for city input ====================================================
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ city?: string }>;
+}) {
+  const params = await searchParams;
+  const city = params?.city || "Bilbao";
+
   return (
-    <div className="grid grid-rows[1fr_2fr_1fr]">
-      <main className="flex flex-col items-center justify-center gap-8 p-8">
-        {/* <CitySearcher /> */}
-        <WeatherComponent city="schliengen" />
+    <div className="grid grid-rows-[1fr_2fr_1fr]">
+      <main className="flex flex-col items-center justify-between gap-8 p-8">
+        <h1 className="text-4xl font-bold">Weather App</h1>
+
+        <SearchBar />
+        <WeatherComponent city={city} />
       </main>
     </div>
   );
