@@ -16,7 +16,7 @@ export default async function WeatherComponent({
   const iconClass = `wi ${iconDict[icon] || "wi-na"}`;
   return (
     <>
-      <div className="flex flex-col items-center sm:flex-row sm:w-60 sm:justify-around">
+      <div className="flex flex-col gap-4 items-center sm:flex-row sm:min-w-60 sm:justify-around">
         <i className={`${iconClass} weather-icon`}></i>
         <div>
           <h1 className="text-2xl font-bold">

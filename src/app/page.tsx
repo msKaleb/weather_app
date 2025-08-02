@@ -1,5 +1,5 @@
-import CitySearch from "@/components/CitySearch";
 import SearchBar from "@/components/SearchBar";
+import CitySearcher from "@/components/cities";
 import WeatherComponent from "@/components/WeatherComponent";
 
 // todo: form with search params for city input ====================================================
@@ -15,7 +15,7 @@ export default async function Home({
     <div className="grid grid-rows-[1fr_2fr_1fr]">
       <main className="flex flex-col items-center justify-between gap-8 p-8">
         <h1 className="text-4xl font-bold">Weather App</h1>
-
+        <CitySearcher />
         <SearchBar />
         <WeatherComponent city={city} />
       </main>

@@ -1,10 +1,16 @@
-export type cityType = {
+export type cityType1 = {
   id: number;
   name: string;
   state: string;
   country: string;
   coord: { lat: number; lon: number };
 };
+
+export type cityType = {
+  id: number;
+  name: string;
+  country: string;
+}
 
 export type weatherType = {
   coord: { lon: number; lat: number };

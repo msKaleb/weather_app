@@ -17,27 +17,33 @@ export default function CitySearcher() {
   }
   return (
     <>
-      <h1 className="text-4xl font-bold">Weather App</h1>
-
       {cities.length === 0 ? (
         <p>Loading cities...</p>
       ) : (
-        <datalist className="p-2 border rounded cursor-pointer" id="cities">
-          {cities.map((city, i) => (
-            <option className="text-background" value={city.name} key={i}>
-              {city.name}
-            </option>
-          ))}
-        </datalist>
+        <>
+          <datalist className="p-2 border rounded cursor-pointer" id="cities">
+            {cities.map((city) => (
+              <option
+                className="text-background"
+                value={city.name}
+                key={city.id}
+              >
+                {city.name}
+              </option>
+            ))}
+          </datalist>
+          <label className="flex flex-col">
+            Here you can search for cities:
+            <input
+              type="text"
+              onChange={onInputChange}
+              list="cities"
+              className="p-2 border rounded sm:min-w-60"
+              placeholder="Datalist for cities..."
+            />
+          </label>
+        </>
       )}
-      <input
-        type="text"
-        onChange={onInputChange}
-        list="cities"
-        className="p-2 border rounded"
-        placeholder="Search for a city..."
-      />
-      
     </>
   );
 }

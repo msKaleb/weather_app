@@ -1,7 +1,6 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { useEffect, useState } from "react";
 
 export default function SearchBar() {
   const searchParams = useSearchParams();
@@ -20,9 +19,9 @@ export default function SearchBar() {
     <>
       <input
         type="text"
-        placeholder="Search for a city..."
+        placeholder="Enter a city..."
         onChange={(e) => handleSearch(e.target.value)}
-        className="p-2 border rounded w-60"
+        className="p-2 border rounded sm:min-w-60"
       />
     </>
   );
