@@ -1,4 +1,5 @@
 "use client";
+import { inputClass } from "@/data/constants";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -21,7 +22,7 @@ export default function SearchBar() {
         type="text"
         placeholder="Enter a city..."
         onChange={(e) => handleSearch(e.target.value)}
-        className="p-2 border rounded sm:min-w-60"
+        className={inputClass}
       />
     </>
   );

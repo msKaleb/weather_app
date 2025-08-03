@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { cityType } from "@/lib/utils";
+import { inputClass } from "@/data/constants";
 
 export default function CitySearcher() {
   const [cities, setCities] = useState<cityType[]>([]);
@@ -38,7 +39,7 @@ export default function CitySearcher() {
               type="text"
               onChange={onInputChange}
               list="cities"
-              className="p-2 border rounded sm:min-w-60"
+              className={inputClass}
               placeholder="Datalist for cities..."
             />
           </label>
