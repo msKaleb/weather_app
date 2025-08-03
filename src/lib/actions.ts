@@ -1,7 +1,9 @@
 import { weatherType } from "./utils";
 import axios from "axios";
 
-export async function fetchWeatherData(city: string): Promise<weatherType | null>   {
+export async function fetchWeatherData(
+  city: string | undefined
+): Promise<weatherType | null> {
   const apikey = process.env.OPENWEATHER_API_KEY;
   const baseUrl = "https://api.openweathermap.org/data/2.5/weather?q=";
 
@@ -10,7 +12,6 @@ export async function fetchWeatherData(city: string): Promise<weatherType | null
       `${baseUrl}${city}&appid=${apikey}&units=metric`
     );
     return data;
-
   } catch (error) {
     return null;
   }
