@@ -9,6 +9,7 @@ import axios from "axios";
 
 /**
  * @todo place a search button on input field to trigger search
+ * @todo if there are no search params, clean the input (input's tag value)
  */
 export default function CityDatalist() {
   const [cities, setCities] = useState<cityType[]>([]);
@@ -22,7 +23,7 @@ export default function CityDatalist() {
   useDebouncedEffect(
     () => {
       const fetchCities = async () => {
-        let uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
+        const uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
         if (query.length < 3) {
           setCities([]);
           return;

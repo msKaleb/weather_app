@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { DependencyList } from "react";
 
 /**
  * @description Simulates a debounced useEffect()
@@ -8,7 +9,7 @@ import { useEffect } from "react";
  */
 export function useDebouncedEffect(
   effect: () => void,
-  deps: any[],
+  deps: DependencyList,
   delay: number
 ) {
   useEffect(() => {

@@ -12,7 +12,7 @@ export async function fetchWeatherData(
       `${baseUrl}${city}&appid=${apikey}&units=metric`
     );
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

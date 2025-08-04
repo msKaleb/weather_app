@@ -1,5 +1,6 @@
 import WeatherComponent from "@/components/WeatherComponent";
 import CityDatalist from "@/components/CityDatalist";
+import Link from "next/link";
 
 /**
  * @todo make the title a link to homepage
@@ -16,7 +17,7 @@ export default async function Home({
   return (
     <div className="grid grid-rows-[1fr_2fr_1fr]">
       <main className="flex flex-col items-center justify-between gap-8 p-8">
-        <h1 className="text-4xl font-bold">Weather App</h1>
+        <Link replace href={`/`} className="text-4xl font-bold">Weather App</Link>
         <CityDatalist />
         <WeatherComponent city={city} />
       </main>

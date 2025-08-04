@@ -45,3 +45,6 @@ forecast_samples
 
 # my tests
 test*
+
+# deprecated files
+deprecated

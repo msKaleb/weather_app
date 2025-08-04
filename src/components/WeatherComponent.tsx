@@ -14,12 +14,13 @@ export default async function WeatherComponent({
   if (city === undefined) {
     return <p className="text-blue-400 text-2xl">Enter a city name</p>;
   }
-  const data: weatherType | null | undefined = await fetchWeatherData(city);
+  const data: weatherType | null = await fetchWeatherData(city);
   if (!data) {
     return (
       <p className="text-red-500 text-2xl">Error fetching weather data.</p>
     );
   }
+  // console.log(data); // debugging
   const icon = data.weather[0].icon;
   const iconClass = `wi ${iconDict[icon] || "wi-na"}`;
   return (
