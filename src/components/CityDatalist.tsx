@@ -1,19 +1,23 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/constants";
 import { cityType } from "@/lib/utils";
 import axios from "axios";
 
+/**
+ * @todo place a search button on input field to trigger search
+ */
 export default function CityDatalist() {
   const [cities, setCities] = useState<cityType[]>([]);
   const [query, setQuery] = useState<string>("");
 
-  const router = useRouter();
+  const path = usePathname();
+  const {replace} = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams.toString());
 
   useDebouncedEffect(
     () => {
@@ -47,7 +51,7 @@ export default function CityDatalist() {
       const cityToQuery: string =
         `${selectedCity.name}, ${selectedCity.country}`.trim();
       params.set("city", cityToQuery);
-      router.push(`/?${params.toString()}`);
+      replace(`${path}?${params.toString()}`);
     } else {
       params.delete("city");
     }
@@ -57,15 +61,14 @@ export default function CityDatalist() {
     if (e.key === "Enter") {
       if (query.trim()) {
         params.set("city", query.trim());
-        router.push(`/?${params.toString()}`);
+        replace(`/?${params.toString()}`);
       } else {
         params.delete("city");
-        router.push(`/`);
+        replace(path);
       }
     }
   }
 
-  // TODO: place a search button on input field to trigger search
   return (
     <>
       <datalist id="cities">
