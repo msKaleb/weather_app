@@ -19,7 +19,11 @@ export async function GET(req: NextRequest) {
     // const res = await fetch(`${baseUrl}${query}&limit=10&appid=${apikey}`);
 
     return new NextResponse(data.data);
-  } catch {
-    return null;
+  } catch (error) {
+    console.error("Geocoding API error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch location data" },
+      { status: 500 }
+    );
   }
 }
