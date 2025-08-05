@@ -1,7 +1,7 @@
 import "weather-icons/css/weather-icons.css";
 import { iconDict } from "@/app/dictionary";
 import { weatherType } from "@/lib/utils";
-import { fetchWeatherData } from "@/lib/actions";
+import { fetchWeatherData, fetchVCWeatherData } from "@/lib/actions";
 
 // =================================================================================================
 //                                         WeatherComponent
@@ -38,3 +38,5 @@ export default async function WeatherComponent({
     </>
   );
 }
+
+

@@ -1,3 +1,4 @@
+import VCWeatherComponent from "@/components/VCWeatherComponent";
 import WeatherComponent from "@/components/WeatherComponent";
 import CityDatalist from "@/components/CityDatalist";
 import Link from "next/link";
@@ -17,9 +18,12 @@ export default async function Home({
   return (
     <div className="grid grid-rows-[1fr_2fr_1fr]">
       <main className="flex flex-col items-center justify-between gap-8 p-8">
-        <Link replace href={`/`} className="text-4xl font-bold">Weather App</Link>
+        <Link replace href={`/`} className="text-4xl font-bold">
+          Weather App
+        </Link>
         <CityDatalist />
         <WeatherComponent city={city} />
+        <VCWeatherComponent city={city} />
       </main>
     </div>
   );

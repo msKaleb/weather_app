@@ -10,6 +10,7 @@ import axios from "axios";
 /**
  * @todo place a search button on input field to trigger search
  * @todo if there are no search params, clean the input (input's tag value)
+ * @todo datalist not working on smartphone
  */
 export default function CityDatalist() {
   const [cities, setCities] = useState<cityType[]>([]);
