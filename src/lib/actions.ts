@@ -1,5 +1,5 @@
 import { weatherType } from "./utils";
-import { OpenWeatherOneCallType } from "./openWeatherOneCallAPI";
+// import { OpenWeatherOneCallType } from "./openWeatherOneCallAPI";
 import { VCWeatherType } from "./visualCrossingType";
 import axios from "axios";
 
