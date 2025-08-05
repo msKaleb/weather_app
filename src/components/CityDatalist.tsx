@@ -17,7 +17,7 @@ export default function CityDatalist() {
   const [query, setQuery] = useState<string>("");
 
   const path = usePathname();
-  const {replace} = useRouter();
+  const { replace } = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
 
@@ -25,12 +25,16 @@ export default function CityDatalist() {
     () => {
       const fetchCities = async () => {
         const uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
+        // const uriQuery = `/api/geoCode?q=${encodeURIComponent(query.trim())}`;
         if (query.length < 3) {
           setCities([]);
           return;
         }
         try {
-          const { data } = await axios.get(uriQuery);
+          const { data }: { data: cityType[] } = await axios.get(uriQuery);
+          // console.log(`geoCode: ${JSON.stringify(data)}`);
+          console.log(`data: ${JSON.stringify(data)}`);
+          // TODO: if data === [], use geoCode for a second try
           setCities(data);
         } catch {
           setCities([]);

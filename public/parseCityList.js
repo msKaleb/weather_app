@@ -13,6 +13,8 @@ const cities = originalData.filter((city) => {
       id: city.id,
       name: city.name,
       country: city.country.toUpperCase(),
+      lat: city.coord.lat,
+      lon: city.coord.lon
     });
     return true;
   }

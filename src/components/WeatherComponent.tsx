@@ -1,7 +1,7 @@
 import "weather-icons/css/weather-icons.css";
 import { iconDict } from "@/app/dictionary";
 import { weatherType } from "@/lib/utils";
-import { fetchWeatherData, fetchVCWeatherData } from "@/lib/actions";
+import { fetchWeatherData } from "@/lib/actions";
 
 // =================================================================================================
 //                                         WeatherComponent

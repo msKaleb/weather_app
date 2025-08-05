@@ -3,6 +3,9 @@ import { fetchVCWeatherData } from "@/lib/actions";
 // =================================================================================================
 //                                        VCWeatherComponent
 // =================================================================================================
+/**
+ * @description fetches data from weather.visualcrossing.com
+ */
 export default async function VCWeatherComponent({
   city,
 }: {
