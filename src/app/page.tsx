@@ -16,15 +16,15 @@ export default async function Home({
   const city = params?.city || undefined;
 
   return (
-    <div className="grid grid-rows-[1fr_2fr_1fr]">
-      <main className="flex flex-col items-center justify-between gap-8 p-8">
-        <Link replace href={`/`} className="text-4xl font-bold">
-          Weather App
-        </Link>
-        <CityDatalist />
-        <WeatherComponent city={city} />
-        <VCWeatherComponent city={city} />
-      </main>
-    </div>
+    // <div className="flex sm:grid sm:grid-rows-[1fr_2fr_1fr]">
+    <main className="flex flex-col items-center justify-start h-lvh gap-8 py-8 m-1 bg-blue-950">
+      <Link replace href={`/`} className="text-4xl font-bold">
+        Weather App
+      </Link>
+      <CityDatalist />
+      <WeatherComponent city={city} />
+      <VCWeatherComponent city={city} />
+    </main>
+    // </div>
   );
 }

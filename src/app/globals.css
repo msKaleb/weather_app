@@ -27,5 +27,13 @@ body {
 
 .weather-icon {
   font-size: 4rem;
-  color: var(--foreground);
+  /* color: var(--foreground); */
+}
+
+.weather-icon-min {
+  font-size: 2rem;
+}
+
+.temperature-font {
+  font-size: 6rem;
 }

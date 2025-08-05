@@ -72,6 +72,7 @@ export type VCWeatherType = {
   longitude: number;
   resolvedAddress: string;
   address: string;
+  description: string;
   timezone: string;
   tzoffset: number;
   days: VCDay[];
