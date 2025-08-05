@@ -7,7 +7,7 @@ export function getOPENWEATHER_API_KEY() {
   return process.env.OPENWEATHER_API_KEY;
 }
 
-export async function getCoords(city: string): Promise<any> {
+/* export async function getCoords(city: string): Promise<any> {
   const apikey = getOPENWEATHER_API_KEY();
   const baseUrl = "http://api.openweathermap.org/geo/1.0/direct?q=";
   const uriQuery = `${baseUrl}${city}&limit=10&appid=${apikey}`;
@@ -21,16 +21,16 @@ export async function getCoords(city: string): Promise<any> {
   } catch {
     return null;
   }
-}
+} */
 
-export async function fetchOpenWeatherOneCallAPI(
+/* export async function fetchOpenWeatherOneCallAPI(
   city: string | undefined
 ): Promise<OpenWeatherOneCallType | null> {
   const apikey = getOPENWEATHER_API_KEY();
   const baseUrl = "https://api.openweathermap.org/data/3.0/onecall?";
 
   return null;
-}
+} */
 
 export async function fetchWeatherData(
   city: string | undefined
