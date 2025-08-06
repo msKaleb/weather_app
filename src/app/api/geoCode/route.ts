@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-// import { geoCodingType } from "@/lib/utils"; // can I use it?
+import { geoCodingType } from "@/lib/utils"; // can I use it?
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 import axios from "axios";
 
@@ -15,10 +15,11 @@ export async function GET(req: NextRequest) {
   const baseUrl = "http://api.openweathermap.org/geo/1.0/direct?q=";
 
   try {
-    const data = await axios.get(`${baseUrl}${query}&limit=10&appid=${apikey}`);
-    // const res = await fetch(`${baseUrl}${query}&limit=10&appid=${apikey}`);
-
-    return new NextResponse(data.data);
+    const { data }: { data: geoCodingType } = await axios.get(
+      `${baseUrl}${query}&limit=10&appid=${apikey}`
+    );
+    console.log("endpoint ", data);
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Geocoding API error:", error);
     return NextResponse.json(
