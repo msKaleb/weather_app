@@ -1,5 +1,5 @@
 import { weatherType } from "./utils";
-// import { OpenWeatherOneCallType } from "./openWeatherOneCallAPI";
+import { OpenWeatherOneCallType } from "./openWeatherOneCallAPI";
 import { VCWeatherType } from "./visualCrossingType";
 import axios from "axios";
 
@@ -23,14 +23,14 @@ export function getOPENWEATHER_API_KEY() {
   }
 } */
 
-/* export async function fetchOpenWeatherOneCallAPI(
+export async function fetchOpenWeatherOneCallAPI(
   city: string | undefined
 ): Promise<OpenWeatherOneCallType | null> {
   const apikey = getOPENWEATHER_API_KEY();
   const baseUrl = "https://api.openweathermap.org/data/3.0/onecall?";
 
   return null;
-} */
+}
 
 export async function fetchWeatherData(
   city: string | undefined

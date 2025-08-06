@@ -16,6 +16,7 @@ export type cityType = {
 
 export type geoCodingType = {
   name: string;
+  local_names?: { [index: string]: string }[];
   lat: number;
   lon: number;
   country: string;

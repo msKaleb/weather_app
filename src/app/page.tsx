@@ -2,6 +2,7 @@ import VCWeatherComponent from "@/components/VCWeatherComponent";
 import WeatherComponent from "@/components/WeatherComponent";
 import CityDatalist from "@/components/CityDatalist";
 import Link from "next/link";
+import OneCallAPIComponent from "@/components/OneCallAPIComponent";
 
 /**
  * @todo make the title a link to homepage
@@ -23,6 +24,7 @@ export default async function Home({
       </Link>
       <CityDatalist />
       <WeatherComponent city={city} />
+      <OneCallAPIComponent city={city} />
       <VCWeatherComponent city={city} />
     </main>
     // </div>
