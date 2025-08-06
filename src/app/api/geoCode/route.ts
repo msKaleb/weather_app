@@ -1,25 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
-import { geoCodingType } from "@/lib/utils"; // can I use it?
+import { geoCodingType, LanguageCode } from "@/lib/utils";
+import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 import axios from "axios";
 
+/**
+ * @todo select desired units, language, etc. Via context to client, then via request?
+ * @todo geoCode returns an array, which one should we pick? for now picking [0]
+ * @description this endpoint returns the weather conditions using geoCode API
+ */
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("q") || "";
-
-  if (!query || query?.length < 3) {
-    return NextResponse.json([]);
-  }
+  const units: "standard" | "metric" | "imperial" = "metric"; // TODO: to be changed by the user
+  const lang: LanguageCode = "en"; // TODO: to be changed by the user
 
   const apikey = getOPENWEATHER_API_KEY();
-  const baseUrl = "http://api.openweathermap.org/geo/1.0/direct?q=";
+  const geoCodeUrl = "http://api.openweathermap.org/geo/1.0/direct?q=";
+  const oneCallAPIUrl = "https://api.openweathermap.org/data/3.0/onecall?";
 
   try {
-    const { data }: { data: geoCodingType } = await axios.get(
-      `${baseUrl}${query}&limit=10&appid=${apikey}`
+    // call geoCode API ============================================================================
+    const { data }: { data: geoCodingType[] } = await axios.get(
+      `${geoCodeUrl}${query}&limit=10&appid=${apikey}`
     );
-    console.log("endpoint ", data);
-    return NextResponse.json(data);
+    // const coords = `lat=${data[0].lat}&lon=${data[0].lon}`;
+
+    // call OneCallAPI3.0 ==========================================================================
+    // const oneCallAPIRequest = `${oneCallAPIUrl}${coords}&units=${units}&appid=${apikey}`;
+    const oneCallAPIRequest =
+      oneCallAPIUrl +
+      "lat=" +
+      data[0].lat +
+      "&lon=" +
+      data[0].lon +
+      "&units=" +
+      units +
+      "&appid=" +
+      apikey +
+      "&lang=" +
+      lang;
+
+    // console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
+    const { data: weather }: { data: OpenWeatherOneCallType } = await axios.get(
+      oneCallAPIRequest
+    );
+    return NextResponse.json(weather);
   } catch (error) {
     console.error("Geocoding API error:", error);
     return NextResponse.json(

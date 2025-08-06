@@ -33,7 +33,7 @@ export default function CityDatalist() {
         try {
           const { data }: { data: cityType[] } = await axios.get(uriQuery);
           // console.log(`geoCode: ${JSON.stringify(data)}`);
-          console.log(`data: ${JSON.stringify(data)}`);
+          // console.log(`data: ${JSON.stringify(data)}`);
           // TODO: if data === [], use geoCode for a second try
           setCities(data);
         } catch {

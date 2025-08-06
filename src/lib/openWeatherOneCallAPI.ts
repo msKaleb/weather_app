@@ -33,8 +33,9 @@ export type OpenWeatherOneCallType<U extends 'standard' | 'metric' | 'imperial' 
   timezone: string;
   timezone_offset: number; // seconds from UTC
   
+  // Current weather data API response
   current: {
-    dt: number;
+    dt: number; // Current time, Unix, UTC
     sunrise?: number; // optional for polar regions
     sunset?: number; // optional for polar regions
     temp: number;

@@ -1,10 +1,66 @@
-export type cityType1 = {
+/* export type cityType1 = {
   id: number;
   name: string;
   state: string;
   country: string;
   coord: { lat: number; lon: number };
-};
+}; */
+
+export type TempUnit = "°C" | "°F" | "°K";
+
+export type LanguageCode =
+  | "sq" // Albanian
+  | "af" // Afrikaans
+  | "ar" // Arabic
+  | "az" // Azerbaijani
+  | "eu" // Basque
+  | "be" // Belarusian
+  | "bg" // Bulgarian
+  | "ca" // Catalan
+  | "zh_cn" // Chinese Simplified
+  | "zh_tw" // Chinese Traditional
+  | "hr" // Croatian
+  | "cz" // Czech
+  | "da" // Danish
+  | "nl" // Dutch
+  | "en" // English
+  | "fi" // Finnish
+  | "fr" // French
+  | "gl" // Galician
+  | "de" // German
+  | "el" // Greek
+  | "he" // Hebrew
+  | "hi" // Hindi
+  | "hu" // Hungarian
+  | "is" // Icelandic
+  | "id" // Indonesian
+  | "it" // Italian
+  | "ja" // Japanese
+  | "kr" // Korean
+  | "ku" // Kurmanji (Kurdish)
+  | "la" // Latvian
+  | "lt" // Lithuanian
+  | "mk" // Macedonian
+  | "no" // Norwegian
+  | "fa" // Persian (Farsi)
+  | "pl" // Polish
+  | "pt" // Portuguese
+  | "pt_br" // Português Brasil
+  | "ro" // Romanian
+  | "ru" // Russian
+  | "sr" // Serbian
+  | "sk" // Slovak
+  | "sl" // Slovenian
+  | "sp" // Spanish (alternative code)
+  | "es" // Spanish (alternative code)
+  | "sv" // Swedish (alternative code)
+  | "se" // Swedish (alternative code)
+  | "th" // Thai
+  | "tr" // Turkish
+  | "ua" // Ukrainian (alternative code)
+  | "uk" // Ukrainian (alternative code)
+  | "vi" // Vietnamese
+  | "zu"; // Zulu
 
 export type cityType = {
   id: number;
@@ -56,69 +112,3 @@ export type weatherType = {
   name: string;
   cod: number;
 };
-
-/*export type _fetchVCWeatherData = {
-  queryCost: 1;
-  latitude: 53.77237;
-  longitude: 18.53357;
-  resolvedAddress: "Mieliczki, Skórcz (Gmina), Woj. Pomorskie, Polska";
-  address: "mieliczki";
-  timezone: "Europe/Warsaw";
-  tzoffset: 2;
-  description: "Similar temperatures continuing with a chance of rain tomorrow.";
-  days: VCDay[];
-  alerts: [];
-  stations: {
-    EPGD: {
-      distance: 67768;
-      latitude: 54.38;
-      longitude: 18.47;
-      useCount: 0;
-      id: "EPGD";
-      name: "EPGD";
-      quality: 50;
-      contribution: 0;
-    };
-    D8078: {
-      distance: 43648;
-      latitude: 53.756;
-      longitude: 19.196;
-      useCount: 0;
-      id: "D8078";
-      name: "DW8078 Prabuty PL";
-      quality: 0;
-      contribution: 0;
-    };
-  };
-  currentConditions: {
-    datetime: "08:15:00";
-    datetimeEpoch: 1754374500;
-    temp: 16.4;
-    feelslike: 16.4;
-    humidity: 84.7;
-    dew: 13.8;
-    precip: 0;
-    precipprob: 0;
-    snow: 0;
-    snowdepth: 0;
-    preciptype: null;
-    windgust: 9.7;
-    windspeed: 5.4;
-    winddir: 243;
-    pressure: 1012;
-    visibility: 10;
-    cloudcover: 91.7;
-    solarradiation: 17;
-    solarenergy: 0.1;
-    uvindex: 0;
-    conditions: "Overcast";
-    icon: "cloudy";
-    stations: ["D8078", "EPGD"];
-    source: "obs";
-    sunrise: "05:07:17";
-    sunriseEpoch: 1754363237;
-    sunset: "20:35:25";
-    sunsetEpoch: 1754418925;
-    moonphase: 0.37;
-  };
-};*/
