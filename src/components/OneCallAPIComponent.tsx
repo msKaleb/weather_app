@@ -54,9 +54,9 @@ export default function OneCallAPIComponent({
 }: {
   city?: string | undefined;
 }) {
-  const [weather, setWeather] = useState<OpenWeatherOneCallType | undefined>(
-    undefined
-  );
+  const [weather, setWeather] = useState<
+    OpenWeatherOneCallType | undefined | null
+  >(undefined);
   const degrees: TempUnit = "°C"; // TODO: to be changed by the user
 
   useEffect(() => {
@@ -73,18 +73,22 @@ export default function OneCallAPIComponent({
           uriQuery
         );
         setWeather(data);
-      } catch {
-        setWeather(undefined);
-        console.error("Error on OneCallAPIComponent useEffect()!"); // debugging
+      } catch (error) {
+        setWeather(null);
+        // console.error("Error on OneCallAPIComponent useEffect()!", error); // debugging
       }
     };
 
     fetchWeather();
   }, [city]);
 
-  if (!weather) {
+  if (weather === undefined) {
     // or error???
     return <p className="text-blue-400 text-2xl">Enter a city name</p>;
+  } else if (weather === null) {
+    return (
+      <p className="text-red-500 text-2xl">Error fetching weather data.</p>
+    );
   }
   const currentWeather = weather?.current.weather[0];
   const iconClass = `wi ${iconDict[currentWeather.icon] || "wi-na"}`;
