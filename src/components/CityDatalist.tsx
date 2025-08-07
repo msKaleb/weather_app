@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/constants";
-import { cityType } from "@/lib/utils";
+import { cityType, geoCodingType } from "@/lib/utils";
 import axios from "axios";
 
 /**
@@ -25,17 +25,30 @@ export default function CityDatalist() {
     () => {
       const fetchCities = async () => {
         const uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
-        // const uriQuery = `/api/geoCode?q=${encodeURIComponent(query.trim())}`;
         if (query.length < 3) {
           setCities([]);
           return;
         }
         try {
           const { data }: { data: cityType[] } = await axios.get(uriQuery);
-          // console.log(`geoCode: ${JSON.stringify(data)}`);
-          // console.log(`data: ${JSON.stringify(data)}`);
-          // TODO: if data === [], use geoCode for a second try
+          // console.log(data.length, "First try") // debugging
           setCities(data);
+
+          // if there is no match in cities.json try using geoCode
+          if (!data.length && !cities.length) {
+            console.log("Fetching suggestions via geoCode API...");
+            const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
+              query.trim()
+            )}&w=false`;
+            const { data: geoData }: { data: geoCodingType[] } =
+              await axios.get(geoCodeQuery);
+            const geoCities: cityType[] = geoData.map((city, i) => ({
+              id: i,
+              name: city.name,
+              country: city.country,
+            }));
+            setCities(geoCities);
+          }
         } catch {
           setCities([]);
         }

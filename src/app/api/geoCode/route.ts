@@ -12,6 +12,7 @@ import axios from "axios";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("q") || "";
+  const returnWeather = searchParams.get("w");
   const units: "standard" | "metric" | "imperial" = "metric"; // TODO: to be changed by the user
   const lang: LanguageCode = "en"; // TODO: to be changed by the user
 
@@ -24,6 +25,11 @@ export async function GET(req: NextRequest) {
     const { data }: { data: geoCodingType[] } = await axios.get(
       `${geoCodeUrl}${query}&limit=10&appid=${apikey}`
     );
+    // console.log(`reaching...\n${geoCodeUrl}${query}&limit=10&appid=${apikey}`); // debugging
+    if (returnWeather === "false") {
+      console.log("Returning city list...")
+      return NextResponse.json(data);
+    }
     // const coords = `lat=${data[0].lat}&lon=${data[0].lon}`;
 
     // call OneCallAPI3.0 ==========================================================================
