@@ -15,6 +15,6 @@ export async function GET(req: NextRequest) {
   const results = cities
     .filter((city) => city.name.toLowerCase().startsWith(query.toLowerCase()))
     .sort((a: cityType, b: cityType) => a.name.localeCompare(b.name)) // sort ascending
-    .slice(0, 10); // only return top 20
+    .slice(0, 10); // only return top 10
   return NextResponse.json(results);
 }

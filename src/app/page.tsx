@@ -3,6 +3,8 @@
 import CityDatalist from "@/components/CityDatalist";
 import Link from "next/link";
 import OneCallAPIComponent from "@/components/OneCallAPIComponent";
+// import GPTCityCombobox from "@/deprecated/GPTCityComboBox";
+import CityCombobox from "@/components/CityCombobox";
 
 /**
  * @todo make the title a link to homepage
@@ -22,7 +24,9 @@ export default async function Home({
       <Link replace href={`/`} className="text-4xl font-bold">
         Weather App
       </Link>
-      <CityDatalist />
+      {/* <CityDatalist /> */}
+      <CityCombobox />
+      {/* <GPTCityCombobox /> */}
       {/* <WeatherComponent city={city} /> */}
       <OneCallAPIComponent city={city} />
       {/* <VCWeatherComponent city={city} /> */}
