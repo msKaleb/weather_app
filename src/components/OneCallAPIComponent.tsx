@@ -51,8 +51,12 @@ import { TempUnit } from "@/lib/utils";
 // =================================================================================================
 export default function OneCallAPIComponent({
   city,
+  lat,
+  lon,
 }: {
   city?: string | undefined;
+  lat: number | null;
+  lon: number | null;
 }) {
   const [weather, setWeather] = useState<
     OpenWeatherOneCallType | undefined | null
@@ -68,7 +72,10 @@ export default function OneCallAPIComponent({
       }
       try {
         // /api/geoCode is my endpoint, created to fetch data with api key
-        const uriQuery = `/api/geoCode?q=${encodeURIComponent(city.trim())}`;
+        const uriQuery = `/api/geoCode?q=${encodeURIComponent(
+          city.trim()
+        )}&lat=${lat}&lon=${lon}`;
+        console.log(uriQuery)
         const { data }: { data: OpenWeatherOneCallType } = await axios.get(
           uriQuery
         );
@@ -83,7 +90,6 @@ export default function OneCallAPIComponent({
   }, [city]);
 
   if (weather === undefined) {
-    // or error???
     return <p className="text-blue-400 text-2xl">Enter a city name</p>;
   } else if (weather === null) {
     return (

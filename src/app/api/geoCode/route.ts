@@ -12,6 +12,8 @@ import axios from "axios";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("q") || "";
+  let lat = searchParams.get("lat") || null;
+  let lon = searchParams.get("lon") || null;
   const returnWeather = searchParams.get("w");
   const units: "standard" | "metric" | "imperial" = "metric"; // TODO: to be changed by the user
   const lang: LanguageCode = "en"; // TODO: to be changed by the user
@@ -22,24 +24,27 @@ export async function GET(req: NextRequest) {
 
   try {
     // call geoCode API ============================================================================
-    const { data }: { data: geoCodingType[] } = await axios.get(
-      `${geoCodeUrl}${query}&limit=10&appid=${apikey}`
-    );
-    // console.log(`reaching...\n${geoCodeUrl}${query}&limit=10&appid=${apikey}`); // debugging
-    if (returnWeather === "false") {
-      console.log("Returning city list...")
-      return NextResponse.json(data);
+    if (!Number(lat) || !Number(lon)) {
+      const { data }: { data: geoCodingType[] } = await axios.get(
+        `${geoCodeUrl}${query}&limit=10&appid=${apikey}`
+      );
+      lat = data[0].lat.toString();
+      lon = data[0].lon.toString();
+      if (returnWeather === "false") {
+        // console.log(`reaching...\n${geoCodeUrl}${query}&limit=10&appid=${apikey}`); // debugging
+        console.log("Returning city list...");
+        return NextResponse.json(data);
+      }
     }
-    // const coords = `lat=${data[0].lat}&lon=${data[0].lon}`;
-
+    
     // call OneCallAPI3.0 ==========================================================================
     // const oneCallAPIRequest = `${oneCallAPIUrl}${coords}&units=${units}&appid=${apikey}`;
     const oneCallAPIRequest =
       oneCallAPIUrl +
       "lat=" +
-      data[0].lat +
+      lat +
       "&lon=" +
-      data[0].lon +
+      lon +
       "&units=" +
       units +
       "&appid=" +

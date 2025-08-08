@@ -1,6 +1,6 @@
 // import VCWeatherComponent from "@/components/VCWeatherComponent";
 // import WeatherComponent from "@/components/WeatherComponent";
-import CityDatalist from "@/components/CityDatalist";
+// import CityDatalist from "@/components/CityDatalist";
 import Link from "next/link";
 import OneCallAPIComponent from "@/components/OneCallAPIComponent";
 // import GPTCityCombobox from "@/deprecated/GPTCityComboBox";
@@ -13,11 +13,15 @@ import CityCombobox from "@/components/CityCombobox";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ city?: string }>;
+  searchParams: Promise<{ city?: string; lat?: number; lon?: number }>;
 }) {
   const params = await searchParams;
   const city = params?.city || undefined;
+  const lat = params?.lat || null;
+  const lon = params?.lon || null;
 
+  // console.log("in page.tsx: ", lat, lon)
+  
   return (
     // <div className="flex sm:grid sm:grid-rows-[1fr_2fr_1fr]">
     <main className="flex flex-col items-center justify-start min-h-screen gap-8 py-8 m-1 bg-blue-950">
@@ -26,9 +30,8 @@ export default async function Home({
       </Link>
       {/* <CityDatalist /> */}
       <CityCombobox />
-      {/* <GPTCityCombobox /> */}
       {/* <WeatherComponent city={city} /> */}
-      <OneCallAPIComponent city={city} />
+      <OneCallAPIComponent city={city} lat={lat} lon={lon} />
       {/* <VCWeatherComponent city={city} /> */}
     </main>
     // </div>

@@ -6,31 +6,45 @@ import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/constants";
 import { cityType, geoCodingType } from "@/lib/utils";
 import axios from "axios";
-
 import { useCombobox } from "downshift";
 
 export default function CityCombobox() {
   const [cities, setCities] = useState<cityType[]>([]);
   const [query, setQuery] = useState<string>("");
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const path = usePathname();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
 
+  function handleSelect(city: cityType | null) {
+    if (city) {
+      params.set("city", `${city.name}, ${city.country}`);
+      city.lat && params.set("lat", city.lat.toString());
+      city.lon && params.set("lon", city.lon.toString());
+      replace(`${path}?${params.toString()}`);
+    } else {
+      params.delete("city");
+      params.delete("lat");
+      params.delete("lon");
+    }
+  }
+
   const {
     isOpen,
-    getToggleButtonProps,
-    getLabelProps,
+    highlightedIndex,
     getMenuProps,
     getInputProps,
-    highlightedIndex,
     getItemProps,
-    selectedItem,
   } = useCombobox({
     items: cities,
+    inputValue: query,
     onInputValueChange({ inputValue }) {
       setQuery(inputValue ?? "");
+    },
+    onSelectedItemChange({ selectedItem }) {
+      handleSelect(selectedItem);
     },
     itemToString(item) {
       return item ? `${item.name}, ${item.country}` : "";
@@ -42,6 +56,7 @@ export default function CityCombobox() {
     () => {
       const fetchCities = async () => {
         const uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
+        console.log("uriQuery", uriQuery);
         if (query.length < 3) {
           setCities([]);
           return;
@@ -53,7 +68,7 @@ export default function CityCombobox() {
 
           // if there is no match in cities.json try using geoCode =================================
           if (!data.length && !cities.length) {
-            console.log("Fetching suggestions via geoCode API...");
+            // console.log("Fetching suggestions via geoCode API..."); // debugging
             const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
               query.trim()
             )}&w=false`;
@@ -63,6 +78,8 @@ export default function CityCombobox() {
               id: i,
               name: city.name,
               country: city.country,
+              lat: city.lat,
+              lon: city.lon,
             }));
             setCities(geoCities);
           } // endif
@@ -87,23 +104,34 @@ export default function CityCombobox() {
               className: inputClass,
               value: query,
             })}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                handleSelect({
+                  id: 1,
+                  name: query.split(",")[0],
+                  country: query.split(",")[1] || "",
+                  // lat: 0,
+                  // lon: 0,
+                });
+              }
+            }}
           />
           {query ? (
             <button
               onClick={() => setQuery("")}
-              className="absolute right-8 top-1 bottom-1 px-2 hover:cursor-pointer"
+              className="absolute right-2 top-1 bottom-1 px-2 hover:cursor-pointer"
             >
               🗴
             </button>
           ) : (
             ""
           )}
-          <button
-            className="absolute right-2 top-1 bottom-1 px-2 hover:cursor-pointer"
+          {/* <button
+            className="absolute right-2 text-xl top-1 bottom-1 px-2 hover:cursor-pointer"
             {...getToggleButtonProps()}
           >
             {isOpen ? "↑" : "↓"}
-          </button>
+          </button> */}
         </div>
       </div>
       {/* <p>{cities.length && cities[0].name}</p> */}

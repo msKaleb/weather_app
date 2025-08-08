@@ -12,8 +12,8 @@ export type cityType = {
   id: number;
   name: string;
   country: string;
-  // lat: number;
-  // lon: number;
+  lat?: number;
+  lon?: number;
 };
 
 export type geoCodingType = {

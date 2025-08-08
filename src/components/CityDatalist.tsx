@@ -36,7 +36,7 @@ export default function CityDatalist() {
 
           // if there is no match in cities.json try using geoCode
           if (!data.length && !cities.length) {
-            console.log("Fetching suggestions via geoCode API...");
+            // console.log("Fetching suggestions via geoCode API..."); // debugging
             const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
               query.trim()
             )}&w=false`;
@@ -46,6 +46,8 @@ export default function CityDatalist() {
               id: i,
               name: city.name,
               country: city.country,
+              lat: city.lat,
+              lon: city.lon,
             }));
             setCities(geoCities);
           }
