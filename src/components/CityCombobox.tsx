@@ -96,12 +96,12 @@ export default function CityCombobox() {
 
   return (
     <div>
-      <div id="combobox">
-        <div id="input-and-button" className={`relative`}>
+      <div id="combobox" className="w-90">
+        <div id="input-and-button" className={`relative mx-auto`}>
           <input
             {...getInputProps({
               placeholder: "Search cities...",
-              className: inputClass,
+              className: `${inputClass} w-full`,
               value: query,
             })}
             onKeyUp={(e) => {
@@ -121,7 +121,7 @@ export default function CityCombobox() {
               onClick={() => setQuery("")}
               className="absolute right-2 top-1 bottom-1 px-2 hover:cursor-pointer"
             >
-              🗴
+              x
             </button>
           ) : (
             ""
@@ -136,7 +136,7 @@ export default function CityCombobox() {
       </div>
       {/* <p>{cities.length && cities[0].name}</p> */}
       <ul
-        className={`absolute bg-white mt-1 max-h-50 overflow-scroll z-10 sm:min-w-60 ${
+        className={`bg-white max-h-50 overflow-scroll z-10 sm:min-w-60 ${
           !(isOpen && cities.length) && "hidden"
         }`}
         {...getMenuProps()}

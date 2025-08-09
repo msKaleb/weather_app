@@ -24,7 +24,7 @@ export default async function Home({
   
   return (
     // <div className="flex sm:grid sm:grid-rows-[1fr_2fr_1fr]">
-    <main className="flex flex-col items-center justify-start min-h-screen gap-8 py-8 m-1 bg-blue-950">
+    <main className="flex flex-col items-center justify-start min-h-screen gap-8 py-8 m-1 bg-blue-950;">
       <Link replace href={`/`} className="text-4xl font-bold">
         Weather App
       </Link>
