@@ -20,7 +20,7 @@ export const iconDict: { [index: string]: string } = {
 };
 
 export const iconVCDict: { [index: string]: string } = {
-  "snow": "wi-snow",  // Amount of snow is greater than zero
+  "snow": "wi-snow", // Amount of snow is greater than zero
   "snow-showers-day": "wi-day-snow", //	Periods of snow during the day
   "snow-showers-night": "wi-night-alt-snow", //	Periods of snow during the night
   "thunder-rain": "wi-storm-showers", //	Thunderstorms throughout the day or night
