@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cityType } from "@/lib/utils";
+import { cityType } from "@/lib/types";
 import citiesJson from "@/data/cities.json" assert { type: "json" };
 
 export async function GET(req: NextRequest) {

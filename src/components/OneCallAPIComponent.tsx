@@ -3,7 +3,7 @@ import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { useEffect, useState } from "react";
 import { iconDict } from "@/app/dictionary";
 import axios from "axios";
-import { TempUnit } from "@/lib/utils";
+import { TempUnit } from "@/lib/types";
 
 // import { geoCodingType } from "@/lib/utils";
 // import { fetchOpenWeatherOneCallAPI } from "@/lib/actions";
@@ -49,6 +49,12 @@ import { TempUnit } from "@/lib/utils";
 // =================================================================================================
 //                                     client component version
 // =================================================================================================
+/**
+ * @todo when typing a city and pressing enter, the displayed city is what it was sent,
+ * should be the matching city from the API (eg. aaa should return 'Anaa, FR').
+ * Maybe /geoCode.ts should just return the matching cities, and put the weather retrieve
+ * into another different endpoint. Deactivating 'Enter' key press in CityCombobox for now
+ */
 export default function OneCallAPIComponent({
   city,
   lat,
@@ -75,7 +81,6 @@ export default function OneCallAPIComponent({
         const uriQuery = `/api/geoCode?q=${encodeURIComponent(
           city.trim()
         )}&lat=${lat}&lon=${lon}`;
-        console.log(uriQuery)
         const { data }: { data: OpenWeatherOneCallType } = await axios.get(
           uriQuery
         );
@@ -90,10 +95,10 @@ export default function OneCallAPIComponent({
   }, [city]);
 
   if (weather === undefined) {
-    return <p className="text-blue-400 text-2xl">Enter a city name</p>;
+    return <p className="text-primary text-2xl">Enter a city name</p>;
   } else if (weather === null) {
     return (
-      <p className="text-red-500 text-2xl">Error fetching weather data.</p>
+      <p className="text-destructive text-2xl">Error fetching weather data.</p>
     );
   }
   const currentWeather = weather?.current.weather[0];
@@ -117,13 +122,13 @@ export default function OneCallAPIComponent({
         </div>
       </div>
 
-      <div className="bg-blue-100 rounded-2xl text-background flex flex-col max-w-11/12 sm:max-w-6/10 gap-4 p-4 m-4">
+      <div className="bg-green-100 rounded-2xl text-black flex flex-col max-w-11/12 sm:max-w-6/10 gap-4 p-4 m-4">
         <h2 className="text-xl font-bold">Forecast for the next days</h2>
         <ul className="flex gap-2 overflow-auto">
           {days.map((day, i) => (
             <li
               key={i}
-              className="w-30 flex-shrink-0 odd:bg-blue-200 even:bg-blue-300 rounded-4xl p-4 flex flex-col items-center gap-2 justify-between"
+              className="w-30 flex-shrink-0 odd:bg-green-200 even:bg-green-300 rounded-4xl p-4 flex flex-col items-center gap-2 justify-between"
             >
               <div>
                 <i

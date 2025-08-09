@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { geoCodingType, LanguageCode } from "@/lib/utils";
+import { geoCodingType, LanguageCode } from "@/lib/types";
 import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 import axios from "axios";

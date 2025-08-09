@@ -1,14 +1,18 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/constants";
-import { cityType, geoCodingType } from "@/lib/utils";
+import { cityType, geoCodingType } from "@/lib/types";
 import axios from "axios";
 import { useCombobox } from "downshift";
 
+/**
+ * @todo ensure focus lost of the input to hide keyboard in mobile version
+ */
 export default function CityCombobox() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [cities, setCities] = useState<cityType[]>([]);
   const [query, setQuery] = useState<string>("");
   // const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -45,6 +49,7 @@ export default function CityCombobox() {
     },
     onSelectedItemChange({ selectedItem }) {
       handleSelect(selectedItem);
+      inputRef.current?.blur();
     },
     itemToString(item) {
       return item ? `${item.name}, ${item.country}` : "";
@@ -56,19 +61,16 @@ export default function CityCombobox() {
     () => {
       const fetchCities = async () => {
         const uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
-        console.log("uriQuery", uriQuery);
         if (query.length < 3) {
           setCities([]);
           return;
         }
         try {
           const { data }: { data: cityType[] } = await axios.get(uriQuery);
-          // console.log(data.length, "First try") // debugging
           setCities(data);
 
           // if there is no match in cities.json try using geoCode =================================
           if (!data.length && !cities.length) {
-            // console.log("Fetching suggestions via geoCode API..."); // debugging
             const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
               query.trim()
             )}&w=false`;
@@ -95,16 +97,17 @@ export default function CityCombobox() {
   ); // end of debounced effect
 
   return (
-    <div>
-      <div id="combobox" className="w-90">
+    <div className="w-[90%] sm:max-w-[400px]">
+      <div id="combobox">
         <div id="input-and-button" className={`relative mx-auto`}>
           <input
+            ref={inputRef}
             {...getInputProps({
               placeholder: "Search cities...",
               className: `${inputClass} w-full`,
               value: query,
             })}
-            onKeyUp={(e) => {
+            /* onKeyUp={(e) => {
               if (e.key === "Enter") {
                 handleSelect({
                   id: 1,
@@ -114,7 +117,7 @@ export default function CityCombobox() {
                   // lon: 0,
                 });
               }
-            }}
+            }} */
           />
           {query ? (
             <button
@@ -136,15 +139,15 @@ export default function CityCombobox() {
       </div>
       {/* <p>{cities.length && cities[0].name}</p> */}
       <ul
-        className={`bg-white max-h-50 overflow-scroll z-10 sm:min-w-60 ${
+        className={`bg-input max-h-50 overflow-scroll z-10 sm:min-w-60 ${
           !(isOpen && cities.length) && "hidden"
         }`}
         {...getMenuProps()}
       >
         {cities.map((city, index) => (
           <li
-            className={`text-black hover:cursor-pointer p-2 ${
-              highlightedIndex === index && "bg-blue-300"
+            className={`hover:cursor-pointer p-2 ${
+              highlightedIndex === index && "bg-primary-foreground"
             }`}
             key={city.id}
             {...getItemProps({ item: city, index })} // it expects {item, index}

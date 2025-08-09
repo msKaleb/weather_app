@@ -1,4 +1,4 @@
-import { weatherType } from "./utils";
+import { weatherType } from "./types";
 import { VCWeatherType } from "./visualCrossingType";
 import axios from "axios";
 

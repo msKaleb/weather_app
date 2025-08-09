@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/constants";
-import { cityType, geoCodingType } from "@/lib/utils";
+import { cityType, geoCodingType } from "@/lib/types";
 import axios from "axios";
 
 /**

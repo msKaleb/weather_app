@@ -5,6 +5,7 @@ import Link from "next/link";
 import OneCallAPIComponent from "@/components/OneCallAPIComponent";
 // import GPTCityCombobox from "@/deprecated/GPTCityComboBox";
 import CityCombobox from "@/components/CityCombobox";
+import { ToggleTheme } from "@/components/ToggleTheme";
 
 /**
  * @todo make the title a link to homepage
@@ -20,14 +21,15 @@ export default async function Home({
   const lat = params?.lat || null;
   const lon = params?.lon || null;
 
-  // console.log("in page.tsx: ", lat, lon)
+  // console.log("in page.tsx: ", city)
   
   return (
     // <div className="flex sm:grid sm:grid-rows-[1fr_2fr_1fr]">
-    <main className="flex flex-col items-center justify-start min-h-screen gap-8 py-8 m-1 bg-blue-950;">
+    <main className="flex flex-col items-center justify-start min-h-screen gap-8 py-8 m-1 bg-background">
       <Link replace href={`/`} className="text-4xl font-bold">
         Weather App
       </Link>
+      <ToggleTheme/>
       {/* <CityDatalist /> */}
       <CityCombobox />
       {/* <WeatherComponent city={city} /> */}

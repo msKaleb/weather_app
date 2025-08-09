@@ -1,6 +1,6 @@
 import "weather-icons/css/weather-icons.css";
 import { iconDict } from "@/app/dictionary";
-import { weatherType } from "@/lib/utils";
+import { weatherType } from "@/lib/types";
 import { fetchWeatherData } from "@/lib/actions";
 
 // =================================================================================================
