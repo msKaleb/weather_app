@@ -122,38 +122,47 @@ export default function OneCallAPIComponent({
         </div>
       </div>
 
-      <div className="bg-green-100 rounded-2xl text-black flex flex-col max-w-11/12 sm:max-w-6/10 gap-4 p-4 m-4">
+      <div className="bg-foreground rounded-2xl text-background flex flex-col max-w-11/12 sm:max-w-6/10 gap-4 p-4 m-4">
         <h2 className="text-xl font-bold">Forecast for the next days</h2>
         <ul className="flex gap-2 overflow-auto">
-          {days.map((day, i) => (
-            <li
-              key={i}
-              className="w-30 flex-shrink-0 odd:bg-green-200 even:bg-green-300 rounded-4xl p-4 flex flex-col items-center gap-2 justify-between"
-            >
-              <div>
-                <i
-                  className={`wi weather-icon-min ${
-                    iconDict[day.weather[0].icon] || "wi-na"
-                  }`}
-                />{" "}
-                {/* <p>{day.weather[0].description}</p> */}
-              </div>
-              <div className=" flex flex-col gap-2 items-center">
-                <p>
-                  {day.temp.min?.toFixed(0)} {degrees}
-                </p>
-                <hr className="border border-blue-700 w-3/5" />
-                <p>
-                  {day.temp.max?.toFixed(0)} {degrees}
-                </p>
-              </div>
-              <p>
-                {new Date(day.dt * 1000).toLocaleDateString(undefined, {
-                  weekday: "short",
-                })}
-              </p>
-            </li>
-          ))}
+          {days.map((day, i) => {
+            const date = new Date(day.dt * 1000);
+            return (
+              <li
+                key={i}
+                className="w-20; flex-shrink-0; odd:bg-green-200 even:bg-green-300 rounded-4xl p-4 flex flex-col items-center gap-2 justify-between"
+              >
+                <div>
+                  <i
+                    className={`wi weather-icon-min ${
+                      iconDict[day.weather[0].icon] || "wi-na"
+                    }`}
+                  />{" "}
+                  {/* <p>{day.weather[0].description}</p> */}
+                </div>
+                <div className=" flex flex-col gap-2 items-center">
+                  <p>
+                    {day.temp.min?.toFixed(0)} {degrees}
+                  </p>
+                  <hr className="border border-blue-700 w-3/5" />
+                  <p>
+                    {day.temp.max?.toFixed(0)} {degrees}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-center">
+                    {date.toLocaleDateString(undefined, { weekday: "short" })}
+                  </p>
+                  <p className="text-center text-[0.9rem]">
+                    {date.toLocaleDateString(undefined, {
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </>

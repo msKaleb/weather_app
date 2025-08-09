@@ -12,10 +12,12 @@ import { useCombobox } from "downshift";
  * @todo ensure focus lost of the input to hide keyboard in mobile version
  */
 export default function CityCombobox() {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
   const [cities, setCities] = useState<cityType[]>([]);
   const [query, setQuery] = useState<string>("");
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const path = usePathname();
   const { replace } = useRouter();
@@ -47,9 +49,15 @@ export default function CityCombobox() {
     onInputValueChange({ inputValue }) {
       setQuery(inputValue ?? "");
     },
-    onSelectedItemChange({ selectedItem }) {
+    onSelectedItemChange({ selectedItem, type }) {
       handleSelect(selectedItem);
-      inputRef.current?.blur();
+
+      setTimeout(() => {
+        if (isMobile) {
+          inputRef.current?.blur();
+        }
+        buttonRef.current?.click();
+      }, 50);
     },
     itemToString(item) {
       return item ? `${item.name}, ${item.country}` : "";
@@ -101,11 +109,11 @@ export default function CityCombobox() {
       <div id="combobox">
         <div id="input-and-button" className={`relative mx-auto`}>
           <input
-            ref={inputRef}
             {...getInputProps({
               placeholder: "Search cities...",
               className: `${inputClass} w-full`,
               value: query,
+              ref: inputRef,
             })}
             /* onKeyUp={(e) => {
               if (e.key === "Enter") {
@@ -121,6 +129,7 @@ export default function CityCombobox() {
           />
           {query ? (
             <button
+              ref={buttonRef}
               onClick={() => setQuery("")}
               className="absolute right-2 top-1 bottom-1 px-2 hover:cursor-pointer"
             >
