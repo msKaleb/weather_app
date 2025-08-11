@@ -7,51 +7,8 @@ import { TempUnit } from "@/lib/types";
 import Image from "next/image";
 import rain from "@/assets/wi-raindrop.svg";
 import wind from "@/assets/wi-strong-wind.svg";
+import Clock from "./clock";
 
-// import { geoCodingType } from "@/lib/utils";
-// import { fetchOpenWeatherOneCallAPI } from "@/lib/actions";
-
-// =================================================================================================
-//                                     server component version
-// =================================================================================================
-/* export default async function OneCallAPIComponent({
-  city,
-}: {
-  city?: string | undefined;
-}) {
-  if (!city) {
-    return <p>No city</p>;
-  }
-  const data: OpenWeatherOneCallType | null = await fetchOpenWeatherOneCallAPI(
-    city
-  );
-  if (!data) {
-    return (
-      <p className="text-red-500 text-2xl">Error fetching weather data.</p>
-    );
-  }
-
-  const currentWeather = data.current.weather[0]
-  const iconClass = `wi ${iconDict[currentWeather.icon] || "wi-na"}`;
-  return (
-    <>
-      <div className="flex flex-col gap-4 items-center sm:flex-row sm:min-w-60 sm:justify-around">
-        <i className={`${iconClass} weather-icon`}></i>
-        <div>
-          <h1 className="text-2xl font-bold">
-            {city}
-          </h1>
-          <p className="text-lg">{data.current.temp} °C</p>
-          <p>{currentWeather.description}</p>
-        </div>
-      </div>
-    </>
-  );
-} */
-
-// =================================================================================================
-//                                     client component version
-// =================================================================================================
 /**
  * @todo when typing a city and pressing enter, the displayed city is what it was sent,
  * should be the matching city from the API (eg. aaa should return 'Anaa, FR').
@@ -71,7 +28,8 @@ export default function OneCallAPIComponent({
   const [weather, setWeather] = useState<
     OpenWeatherOneCallType | undefined | null
   >(undefined);
-  const degrees: TempUnit = "°C"; // TODO: to be changed by the user
+  const degrees: TempUnit = "°C"; // TODO: to be changed by the user ??
+  const windSpeedConversion = 3.6; // TODO: dependent on units, now hardcoded for 'metric'
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -107,6 +65,9 @@ export default function OneCallAPIComponent({
   const currentWeather = weather?.current.weather[0];
   const iconClass = `wi ${iconDict[currentWeather.icon] || "wi-na"}`;
   const days = weather.daily;
+  const cityDate = new Date(weather.current.dt * 1000);
+  // use 'city?.split(", ")[1]' as locale for city's own locale
+
   return (
     <>
       <div className="flex flex-col items-center gap-4 sm:min-w-60 sm:flex-row sm:justify-around">
@@ -114,14 +75,43 @@ export default function OneCallAPIComponent({
         <div>
           <h1 className="text-2xl font-bold">{city}</h1>
           <h2 className="text-xl font-bold">
-            {new Date(weather.current.dt * 1000).toLocaleDateString(undefined, {
+            {cityDate.toLocaleDateString(undefined, {
               weekday: "long",
               month: "long",
               day: "2-digit",
             })}
           </h2>
-          <p className="text-lg">{weather.current.temp} °C</p>
-          <p>{currentWeather.description}</p>
+          {/* <p>Time zone: {weather.timezone}</p> */}
+          {/* <p>Browser language: {navigator.language}</p> */}
+          <p className="text-4xl">
+            {weather.current.temp.toFixed(1)}
+            {degrees}
+          </p>
+          <Clock
+            timeZone={weather.timezone}
+            locale={navigator.language || city?.split(", ")[1]}
+          />
+          <h2 className="text-2xl font-bold">{currentWeather.description}</h2>
+        </div>
+      </div>
+
+      {/* additional info */}
+      <div className="border-foreground bg-[#fafafa]; text-[#09090b]; sm:max-w-2/5; m-4 flex w-[90%] gap-4 rounded-2xl border p-4 sm:max-w-[400px]">
+        <div className="bg-blue-300; w-2/4 rounded-2xl p-2">
+          <p>Precipitation</p>
+          <span className="text-4xl font-bold">
+            {weather.minutely && weather.minutely[0].precipitation > 0
+              ? weather.minutely[0].precipitation.toFixed(1)
+              : 0}
+          </span>
+          mm/h
+        </div>
+        <div className="bg-blue-300; w-2/4 rounded-2xl p-2">
+          <p>Wind speed</p>
+          <span className="text-4xl font-bold">
+            {(weather.current.wind_speed * 3.6).toFixed(1)}
+          </span>
+          km/h
         </div>
       </div>
 
@@ -183,25 +173,6 @@ export default function OneCallAPIComponent({
             );
           })}
         </ul>
-      </div>
-
-      <div className="border-foreground m-4 flex w-[90%] gap-4 rounded-2xl border bg-[#fafafa] p-4 text-[#09090b] sm:max-w-2/5">
-        <div className="w-2/4 rounded-2xl bg-blue-300 p-2">
-          <p>Precipitation</p>
-          <span className="text-5xl font-bold">
-            {weather.minutely && weather.minutely[0].precipitation > 0
-              ? weather.minutely[0].precipitation.toFixed(1)
-              : 0}
-          </span>
-          mm/h
-        </div>
-        <div className="w-2/4 rounded-2xl bg-blue-300 p-2">
-          <p>Wind speed</p>
-          <span className="text-5xl font-bold">
-            {(weather.current.wind_speed * 3.6).toFixed(1)}
-          </span>
-          km/h
-        </div>
       </div>
     </>
   );
