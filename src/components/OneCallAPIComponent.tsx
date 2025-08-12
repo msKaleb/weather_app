@@ -10,11 +10,8 @@ import wind from "@/assets/wi-strong-wind.svg";
 import Clock from "./clock";
 
 /**
- * @todo when typing a city and pressing enter, the displayed city is what it was sent,
- * should be the matching city from the API (eg. aaa should return 'Anaa, FR').
- * Maybe /geoCode.ts should just return the matching cities, and put the weather retrieve
- * into another different endpoint. Deactivating 'Enter' key press in CityCombobox for now
- * @todo check wind speed units
+ * @todo windSpeedConversion should depend on units, now hardcoded to 'metric'
+ * @todo degrees should be selected by the user, now hardcoded to "°C"
  */
 export default function OneCallAPIComponent({
   city,
@@ -29,7 +26,7 @@ export default function OneCallAPIComponent({
     OpenWeatherOneCallType | undefined | null
   >(undefined);
   const degrees: TempUnit = "°C"; // TODO: to be changed by the user ??
-  const windSpeedConversion = 3.6; // TODO: dependent on units, now hardcoded for 'metric'
+  const windSpeedConversion = 3.6;
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -40,9 +37,10 @@ export default function OneCallAPIComponent({
       }
       try {
         // /api/geoCode is my endpoint, created to fetch data with api key
-        const uriQuery = `/api/geoCode?q=${encodeURIComponent(
+        /* const uriQuery = `/api/geoCode?q=${encodeURIComponent(
           city.trim(),
-        )}&lat=${lat}&lon=${lon}`;
+        )}&lat=${lat}&lon=${lon}`; */
+        const uriQuery = `/api/oneCall?lat=${lat}&lon=${lon}`;
         const { data }: { data: OpenWeatherOneCallType } =
           await axios.get(uriQuery);
         setWeather(data);
@@ -109,7 +107,7 @@ export default function OneCallAPIComponent({
         <div className="bg-blue-300; w-2/4 rounded-2xl p-2">
           <p>Wind speed</p>
           <span className="text-4xl font-bold">
-            {(weather.current.wind_speed * 3.6).toFixed(1)}
+            {(weather.current.wind_speed * windSpeedConversion).toFixed(1)}
           </span>
           km/h
         </div>
@@ -147,7 +145,8 @@ export default function OneCallAPIComponent({
                       <Image className="" alt="wind" src={wind} width={40} />
                     </div>
                     <div className="w-3/4 text-end">
-                      {(day.wind_speed * 3.6).toFixed(1) || 0} km/h
+                      {(day.wind_speed * windSpeedConversion).toFixed(1) || 0}{" "}
+                      km/h
                     </div>
                   </div>
                   <div className="hidden w-full gap-1 sm:flex">

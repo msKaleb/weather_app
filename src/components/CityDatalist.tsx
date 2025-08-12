@@ -39,7 +39,7 @@ export default function CityDatalist() {
             // console.log("Fetching suggestions via geoCode API..."); // debugging
             const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
               query.trim()
-            )}&w=false`;
+            )}`;
             const { data: geoData }: { data: geoCodingType[] } =
               await axios.get(geoCodeQuery);
             const geoCities: cityType[] = geoData.map((city, i) => ({

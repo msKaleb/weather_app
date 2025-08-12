@@ -8,9 +8,6 @@ import { cityType, geoCodingType } from "@/lib/types";
 import axios from "axios";
 import { useCombobox } from "downshift";
 
-/**
- * @todo ensure focus lost of the input to hide keyboard in mobile version
- */
 export default function CityCombobox() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -18,6 +15,7 @@ export default function CityCombobox() {
 
   const [cities, setCities] = useState<cityType[]>([]);
   const [query, setQuery] = useState<string>("");
+  const [hasSelectedItem, setHasSelectedItem] = useState(false);
 
   const path = usePathname();
   const { replace } = useRouter();
@@ -46,11 +44,19 @@ export default function CityCombobox() {
   } = useCombobox({
     items: cities,
     inputValue: query,
+    onStateChange(changes) {
+      if (changes.selectedItem) {
+        setHasSelectedItem(true);
+      } else {
+        setHasSelectedItem(false)
+      }
+    },
     onInputValueChange({ inputValue }) {
       setQuery(inputValue ?? "");
     },
     onSelectedItemChange({ selectedItem, type }) {
       handleSelect(selectedItem);
+      setHasSelectedItem(false);
 
       setTimeout(() => {
         if (isMobile) {
@@ -80,8 +86,8 @@ export default function CityCombobox() {
           // if there is no match in cities.json try using geoCode =================================
           if (!data.length && !cities.length) {
             const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
-              query.trim()
-            )}&w=false`;
+              query.trim(),
+            )}`;
             const { data: geoData }: { data: geoCodingType[] } =
               await axios.get(geoCodeQuery);
             const geoCities: cityType[] = geoData.map((city, i) => ({
@@ -101,7 +107,7 @@ export default function CityCombobox() {
       fetchCities();
     },
     [query],
-    300
+    300,
   ); // end of debounced effect
 
   return (
@@ -115,23 +121,28 @@ export default function CityCombobox() {
               value: query,
               ref: inputRef,
             })}
-            /* onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                handleSelect({
+            onKeyUp={(e) => {
+              if (e.key === "Enter" && !hasSelectedItem) {
+                setHasSelectedItem(false);
+                params.set("city", query);
+                params.delete("lat");
+                params.delete("lon");
+                replace(`${path}?${params.toString()}`);
+                /* handleSelect({
                   id: 1,
                   name: query.split(",")[0],
                   country: query.split(",")[1] || "",
                   // lat: 0,
                   // lon: 0,
-                });
+                }); */
               }
-            }} */
+            }}
           />
           {query ? (
             <button
               ref={buttonRef}
               onClick={() => setQuery("")}
-              className="absolute right-2 top-1 bottom-1 px-2 hover:cursor-pointer"
+              className="absolute top-1 right-2 bottom-1 px-2 hover:cursor-pointer"
             >
               x
             </button>
@@ -148,14 +159,14 @@ export default function CityCombobox() {
       </div>
       {/* <p>{cities.length && cities[0].name}</p> */}
       <ul
-        className={`bg-input max-h-50 overflow-scroll z-10 sm:min-w-60 ${
+        className={`bg-input z-10 max-h-50 overflow-scroll sm:min-w-60 ${
           !(isOpen && cities.length) && "hidden"
         }`}
         {...getMenuProps()}
       >
         {cities.map((city, index) => (
           <li
-            className={`hover:cursor-pointer p-2 ${
+            className={`p-2 hover:cursor-pointer ${
               highlightedIndex === index && "bg-primary-foreground"
             }`}
             key={city.id}
