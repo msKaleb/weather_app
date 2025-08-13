@@ -1,10 +1,13 @@
-import Link from "next/link";
 import OneCallAPIComponent from "@/components/OneCallAPIComponent";
-import CityCombobox from "@/components/CityCombobox";
 import { ToggleTheme } from "@/components/ToggleTheme";
+import CityCombobox from "@/components/CityCombobox";
 import { getGeoCodeCities } from "@/lib/actions";
 import { geoCodingType } from "@/lib/types";
+import Link from "next/link";
 
+/**
+ * @todo geoCode returns an array, which one should we pick? for now picking [0]
+ */
 export default async function Home({
   searchParams,
 }: {
@@ -25,20 +28,14 @@ export default async function Home({
     }
   }
 
-  console.log(`In page.tsx:\n\tcity:\t${city}\n\tlat:\t${lat}\n\tlon:\t${lon}`);
   return (
-    // <div className="flex sm:grid sm:grid-rows-[1fr_2fr_1fr]">
     <main className="bg-background m-1 flex min-h-screen flex-col items-center justify-start gap-8 py-8">
       <Link replace href={`/`} className="text-4xl font-bold">
         Weather App
       </Link>
       <ToggleTheme />
-      {/* <CityDatalist /> */}
       <CityCombobox />
-      {/* <WeatherComponent city={city} /> */}
       <OneCallAPIComponent city={city} lat={lat} lon={lon} />
-      {/* <VCWeatherComponent city={city} /> */}
     </main>
-    // </div>
   );
 }

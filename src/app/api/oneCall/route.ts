@@ -4,9 +4,12 @@ import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 import { LanguageCode } from "@/lib/types";
 import axios from "axios";
 
+/**
+ * @todo select desired units, language, etc. Via context to client, then via request?
+ * @description
+ */
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  // const query = searchParams.get("q") || "";
   const lat = searchParams.get("lat") || null;
   const lon = searchParams.get("lon") || null;
 
@@ -19,7 +22,6 @@ export async function GET(req: NextRequest) {
 
   try {
     // call OneCallAPI3.0 ==========================================================================
-    // const oneCallAPIRequest = `${oneCallAPIUrl}${coords}&units=${units}&appid=${apikey}`;
     const oneCallAPIRequest =
       oneCallAPIUrl +
       "lat=" +

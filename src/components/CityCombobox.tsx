@@ -39,8 +39,9 @@ export default function CityCombobox() {
     isOpen,
     highlightedIndex,
     getMenuProps,
-    getInputProps,
     getItemProps,
+    getInputProps,
+    getToggleButtonProps,
   } = useCombobox({
     items: cities,
     inputValue: query,
@@ -48,7 +49,7 @@ export default function CityCombobox() {
       if (changes.selectedItem) {
         setHasSelectedItem(true);
       } else {
-        setHasSelectedItem(false)
+        setHasSelectedItem(false);
       }
     },
     onInputValueChange({ inputValue }) {
@@ -128,13 +129,6 @@ export default function CityCombobox() {
                 params.delete("lat");
                 params.delete("lon");
                 replace(`${path}?${params.toString()}`);
-                /* handleSelect({
-                  id: 1,
-                  name: query.split(",")[0],
-                  country: query.split(",")[1] || "",
-                  // lat: 0,
-                  // lon: 0,
-                }); */
               }
             }}
           />
@@ -142,22 +136,22 @@ export default function CityCombobox() {
             <button
               ref={buttonRef}
               onClick={() => setQuery("")}
-              className="absolute top-1 right-2 bottom-1 px-2 hover:cursor-pointer"
+              className="absolute top-1 right-8 bottom-1 px-2 hover:cursor-pointer"
             >
               x
             </button>
           ) : (
             ""
           )}
-          {/* <button
-            className="absolute right-2 text-xl top-1 bottom-1 px-2 hover:cursor-pointer"
+          <button
+            className="absolute top-1 right-2 bottom-1 px-2 text-xl hover:cursor-pointer"
             {...getToggleButtonProps()}
           >
             {isOpen ? "↑" : "↓"}
-          </button> */}
+          </button>
         </div>
       </div>
-      {/* <p>{cities.length && cities[0].name}</p> */}
+
       <ul
         className={`bg-input z-10 max-h-50 overflow-scroll sm:min-w-60 ${
           !(isOpen && cities.length) && "hidden"

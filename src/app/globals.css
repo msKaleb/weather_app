@@ -43,23 +43,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-.weather-icon {
-  font-size: 6rem;
-  /* color: var(--foreground); */
-}
-
-.weather-icon-min {
-  font-size: 2rem;
-}
-
-.weathor-icon-med {
-  font-size: 4rem;
-}
-
-.temperature-font {
-  font-size: 6rem;
-}
-
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);
@@ -129,7 +112,6 @@
   --sidebar-ring: oklch(0.527 0.154 150.069);
 }
 
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -137,4 +119,25 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.weather-icon {
+  font-size: 6rem;
+  /* color: var(--foreground); */
+}
+
+.weather-icon-min {
+  font-size: 2rem;
+}
+
+.weathor-icon-med {
+  font-size: 4rem;
+}
+
+.temperature-font {
+  font-size: 6rem;
+}
+
+.svg-dark {
+  filter: invert(1) hue-rotate(180deg);
 }

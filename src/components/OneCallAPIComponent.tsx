@@ -8,6 +8,7 @@ import Image from "next/image";
 import rain from "@/assets/wi-raindrop.svg";
 import wind from "@/assets/wi-strong-wind.svg";
 import Clock from "./clock";
+import { useTheme } from "next-themes";
 
 /**
  * @todo windSpeedConversion should depend on units, now hardcoded to 'metric'
@@ -22,6 +23,7 @@ export default function OneCallAPIComponent({
   lat: number | null;
   lon: number | null;
 }) {
+  const { resolvedTheme } = useTheme();
   const [weather, setWeather] = useState<
     OpenWeatherOneCallType | undefined | null
   >(undefined);
@@ -36,10 +38,7 @@ export default function OneCallAPIComponent({
         return;
       }
       try {
-        // /api/geoCode is my endpoint, created to fetch data with api key
-        /* const uriQuery = `/api/geoCode?q=${encodeURIComponent(
-          city.trim(),
-        )}&lat=${lat}&lon=${lon}`; */
+        // /api/oneCall is my endpoint, created to fetch data with api key
         const uriQuery = `/api/oneCall?lat=${lat}&lon=${lon}`;
         const { data }: { data: OpenWeatherOneCallType } =
           await axios.get(uriQuery);
@@ -94,8 +93,8 @@ export default function OneCallAPIComponent({
       </div>
 
       {/* additional info */}
-      <div className="border-foreground bg-[#fafafa]; text-[#09090b]; sm:max-w-2/5; m-4 flex w-[90%] gap-4 rounded-2xl border p-4 sm:max-w-[400px]">
-        <div className="bg-blue-300; w-2/4 rounded-2xl p-2">
+      <div className="border-foreground m-4 flex w-[90%] gap-4 rounded-2xl border p-4 sm:max-w-[400px]">
+        <div className="w-2/4 rounded-2xl p-2">
           <p>Precipitation</p>
           <span className="text-4xl font-bold">
             {weather.minutely && weather.minutely[0].precipitation > 0
@@ -104,7 +103,7 @@ export default function OneCallAPIComponent({
           </span>
           mm/h
         </div>
-        <div className="bg-blue-300; w-2/4 rounded-2xl p-2">
+        <div className="w-2/4 rounded-2xl p-2">
           <p>Wind speed</p>
           <span className="text-4xl font-bold">
             {(weather.current.wind_speed * windSpeedConversion).toFixed(1)}
@@ -114,15 +113,15 @@ export default function OneCallAPIComponent({
       </div>
 
       {/* forecast for the next days */}
-      <div className="border-foreground m-4 flex w-[90%] flex-col gap-4 rounded-2xl border bg-[#fafafa] px-1 py-4 text-[#09090b] sm:max-w-2/5">
+      <div className="border-foreground m-4 flex w-[90%] flex-col gap-4 rounded-2xl border px-4 py-4 sm:max-w-[600px] lg:max-w-[800px] lg:min-w-[400px]">
         <h2 className="pl-4 text-xl font-bold">Forecast for the next days</h2>
-        <ul className="flex gap-4 overflow-auto sm:mx-auto sm:grid sm:grid-cols-4 sm:items-center">
+        <ul className="flex gap-4 overflow-auto sm:mx-auto sm:grid sm:grid-cols-3 sm:items-center lg:grid-cols-4">
           {days.map((day) => {
             const date = new Date(day.dt * 1000);
             return (
               <li
                 key={day.dt}
-                className="flex w-20 flex-shrink-0 flex-col items-center justify-between gap-4 rounded-2xl p-4 odd:bg-blue-200 even:bg-blue-300 sm:w-40"
+                className="border-foreground flex w-20 flex-shrink-0 flex-col items-center justify-between gap-4 rounded-2xl border p-4 sm:w-40"
               >
                 {/* weather icon */}
                 <div className="p-2">
@@ -141,8 +140,16 @@ export default function OneCallAPIComponent({
                     {day.temp.max?.toFixed(0)}°
                   </p>
                   <div className="hidden w-full gap-1 sm:flex">
-                    <div className="w-1/4">
-                      <Image className="" alt="wind" src={wind} width={40} />
+                    <div
+                      className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}
+                    >
+                      <Image
+                        color="white"
+                        className=""
+                        alt="wind"
+                        src={wind}
+                        width={40}
+                      />
                     </div>
                     <div className="w-3/4 text-end">
                       {(day.wind_speed * windSpeedConversion).toFixed(1) || 0}{" "}
@@ -150,7 +157,9 @@ export default function OneCallAPIComponent({
                     </div>
                   </div>
                   <div className="hidden w-full gap-1 sm:flex">
-                    <div className="w-1/4">
+                    <div
+                      className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}
+                    >
                       <Image className="" alt="rain" src={rain} width={50} />
                     </div>
                     <div className="w-3/4 text-end">{day.rain || 0} mm/h</div>
@@ -176,14 +185,3 @@ export default function OneCallAPIComponent({
     </>
   );
 }
-
-/* 
-                  <div className="flex items-center justify-center gap-2 text-[0.9rem]">
-                    <Image alt="wind" src={wind} width={40} />
-                    {day.wind_speed} m/s
-                  </div>
-                  <div className="flex items-center justify-center gap-2 text-[0.9rem]">
-                    <Image alt="rain" src={rain} width={50} />
-                    {day.rain} mm/h
-                  </div>
-*/
