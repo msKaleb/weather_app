@@ -5,8 +5,9 @@ import { useState, useRef } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/constants";
 import { cityType, geoCodingType } from "@/lib/types";
-import axios from "axios";
+// import axios from "axios";
 import { useCombobox } from "downshift";
+// import { getGeoCodeCities } from "@/lib/actions";
 
 export default function CityCombobox() {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -81,7 +82,10 @@ export default function CityCombobox() {
           return;
         }
         try {
-          const { data }: { data: cityType[] } = await axios.get(uriQuery);
+          /* const { data }: { data: cityType[] } = await axios.get(uriQuery);
+          setCities(data); */
+          const response = await fetch(uriQuery);
+          const data: cityType[] = await response.json();
           setCities(data);
 
           // if there is no match in cities.json try using geoCode =================================
@@ -89,8 +93,11 @@ export default function CityCombobox() {
             const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
               query.trim(),
             )}`;
-            const { data: geoData }: { data: geoCodingType[] } =
-              await axios.get(geoCodeQuery);
+            /* const { data: geoData }: { data: geoCodingType[] } =
+              await axios.get(geoCodeQuery); */
+            const response = await fetch(geoCodeQuery);
+            const geoData: geoCodingType[] = await response.json();
+
             const geoCities: cityType[] = geoData.map((city, i) => ({
               id: i,
               name: city.name,

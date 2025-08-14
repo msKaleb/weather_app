@@ -2,7 +2,7 @@ import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { NextRequest, NextResponse } from "next/server";
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 import { LanguageCode } from "@/lib/types";
-import axios from "axios";
+// import axios from "axios";
 
 /**
  * @todo select desired units, language, etc. Via context to client, then via request?
@@ -35,12 +35,20 @@ export async function GET(req: NextRequest) {
       "&lang=" +
       lang;
 
-    console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
-    const { data: weather }: { data: OpenWeatherOneCallType } =
-      await axios.get(oneCallAPIRequest);
-    return NextResponse.json(weather);
+    // console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
+
+    /* const { data: weather }: { data: OpenWeatherOneCallType } =
+      await axios.get(oneCallAPIRequest); */
+    const response = await fetch(oneCallAPIRequest, {
+      cache: "force-cache",
+      next: { revalidate: 600, tags: ["oneCallAPI"] },
+    });
+    const data: OpenWeatherOneCallType = await response.json();
+    // console.log(`Cached data: ${data.headers.get("x-vercel-cache")}`); // debugging
+
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("Error on oneCallAPI", error);
+    console.error("Error on oneCallAPI: ", error);
     return NextResponse.json(
       { error: "Failed to fetch weather data." },
       { status: 500 },

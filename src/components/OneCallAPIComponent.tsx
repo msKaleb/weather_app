@@ -2,7 +2,7 @@
 import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { useEffect, useState } from "react";
 import { iconDict } from "@/app/dictionary";
-import axios from "axios";
+// import axios from "axios";
 import { TempUnit } from "@/lib/types";
 import Image from "next/image";
 import rain from "@/assets/wi-raindrop.svg";
@@ -40,9 +40,13 @@ export default function OneCallAPIComponent({
       try {
         // /api/oneCall is my endpoint, created to fetch data with api key
         const uriQuery = `/api/oneCall?lat=${lat}&lon=${lon}`;
-        const { data }: { data: OpenWeatherOneCallType } =
-          await axios.get(uriQuery);
-        setWeather(data);
+        /* const { data }: { data: OpenWeatherOneCallType } =
+          await axios.get(uriQuery); 
+        setWeather(data); */
+
+        const response = await fetch(uriQuery);
+        const weather: OpenWeatherOneCallType = await response.json();
+        setWeather(weather);
       } catch (error) {
         setWeather(null);
         // console.error("Error on OneCallAPIComponent useEffect()!", error); // debugging
@@ -67,6 +71,7 @@ export default function OneCallAPIComponent({
 
   return (
     <>
+      {/* current weather */}
       <div className="flex flex-col items-center gap-4 sm:min-w-60 sm:flex-row sm:justify-around">
         <i className={`${iconClass} weather-icon`}></i>
         <div>
@@ -78,8 +83,6 @@ export default function OneCallAPIComponent({
               day: "2-digit",
             })}
           </h2>
-          {/* <p>Time zone: {weather.timezone}</p> */}
-          {/* <p>Browser language: {navigator.language}</p> */}
           <p className="text-4xl">
             {weather.current.temp.toFixed(1)}
             {degrees}
@@ -118,6 +121,9 @@ export default function OneCallAPIComponent({
         <ul className="flex gap-4 overflow-auto sm:mx-auto sm:grid sm:grid-cols-3 sm:items-center lg:grid-cols-4">
           {days.map((day) => {
             const date = new Date(day.dt * 1000);
+            const tempMin = Math.round(day.temp.min || NaN);
+            const tempMax = Math.round(day.temp.max || NaN);
+
             return (
               <li
                 key={day.dt}
@@ -130,15 +136,25 @@ export default function OneCallAPIComponent({
                       iconDict[day.weather[0].icon] || "wi-na"
                     }`}
                   />{" "}
-                  {/* <p>{day.weather[0].description}</p> */}
                 </div>
                 {/* wind speed, rain likelihood and temperature */}
                 <div className="flex w-full flex-col items-center gap-1">
-                  <p className="text-center">
-                    {day.temp.min?.toFixed(0)}°{" "}
-                    <span className="hidden sm:inline">/</span>{" "}
-                    {day.temp.max?.toFixed(0)}°
-                  </p>
+                  {/* <p className="text-center">
+                    {tempMin}°<span className="hidden sm:inline"> / </span>{" "}
+                    {tempMax}°
+                  </p> */}
+                  <div className="gap-2 sm:flex">
+                    <p>
+                      <span className="inline sm:hidden">↓ </span>
+                      {tempMin}°
+                    </p>
+                    <span className="hidden sm:inline"> / </span>
+                    <p>
+                      <span className="inline sm:hidden">↑ </span>
+                      {tempMax}°
+                    </p>
+                  </div>
+
                   <div className="hidden w-full gap-1 sm:flex">
                     <div
                       className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}

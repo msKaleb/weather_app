@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { geoCodingType } from "@/lib/types";
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
-import axios from "axios";
+// import axios from "axios";
 
 /**
+ * @todo use fetch(url, cache...)
  * @description this endpoint returns the matching cities using geoCode API
  */
 export async function GET(req: NextRequest) {
@@ -13,10 +14,18 @@ export async function GET(req: NextRequest) {
   const geoCodeUrl = "http://api.openweathermap.org/geo/1.0/direct?q=";
 
   try {
-    const { data }: { data: geoCodingType[] } = await axios.get(
+    /* const { data }: { data: geoCodingType[] } = await axios.get(
       `${geoCodeUrl}${query}&limit=10&appid=${apikey}`,
-    );
-    console.log("Returning city list...");
+    ); 
+    return NextResponse.json(data); */
+
+    const response = await fetch(`${geoCodeUrl}${query}&limit=10&appid=${apikey}`, {
+      cache: "force-cache",
+      next: { revalidate: 600, tags: ["geoCodeAPI"] },
+    });
+    const data: geoCodingType[] = await response.json();
+
+    console.log("Returning city list from geoCode...", data); // debugging
     return NextResponse.json(data);
   } catch (error) {
     console.error("Geocoding API error:", error);
