@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
       "&lang=" +
       lang;
 
-    // console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
+    console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
 
     /* const { data: weather }: { data: OpenWeatherOneCallType } =
       await axios.get(oneCallAPIRequest); */
