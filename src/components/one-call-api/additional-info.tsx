@@ -34,7 +34,7 @@ export default function OneCallAdditionalInfo({
       </div>
       <div className="w-2/4; rounded-2xl p-4">
         <p>Wind direction</p>
-        <div className="bg-green-500; border-foreground mt-2 w-[70px] rounded-full border-2">
+        <div className="bg-green-500; border-foreground mt-2 w-[70px] rounded-full border-2;">
           <Image
             alt="wind-deg"
             src={windDeg}

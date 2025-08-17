@@ -7,6 +7,7 @@ import Link from "next/link";
 
 /**
  * @todo geoCode returns an array, which one should we pick? for now picking [0]
+ * @todo maybe migrate icons to Lucide-React???
  */
 export default async function Home({
   searchParams,

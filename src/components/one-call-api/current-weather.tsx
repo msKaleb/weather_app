@@ -17,6 +17,10 @@ export default function OneCallCurrentWeather({
   const cityDate = new Date(weather.current.dt * 1000);
   const degrees: TempUnit = "°C";
   const iconClass = `wi ${iconDict[currentWeather.icon] || "wi-na"}`;
+  const description: string = currentWeather.description
+    .split(" ")
+    .map((word) => word[0].toLocaleUpperCase() + word.slice(1))
+    .join(" ");
 
   return (
     <div className="flex flex-col items-center gap-4 sm:min-w-60 sm:flex-row sm:justify-around">
@@ -38,7 +42,7 @@ export default function OneCallCurrentWeather({
           timeZone={weather.timezone}
           locale={navigator.language || city?.split(", ")[1]}
         />
-        <h2 className="text-2xl font-bold">{currentWeather.description}</h2>
+        <h2 className="text-2xl font-bold">{description}</h2>
       </div>
     </div>
   );
