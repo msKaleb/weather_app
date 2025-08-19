@@ -3,15 +3,15 @@ import Image from "next/image";
 import { iconDict } from "@/app/dictionary";
 import { useTheme } from "next-themes";
 import wind from "@/assets/wi-strong-wind.svg";
-import rain from "@/assets/wi-raindrop.svg";
+import umbrella from "@/assets/wi-umbrella.svg";
 import snow from "@/assets/wi-snowflake-cold.svg";
+import rain from "@/assets/wi-raindrop.svg";
 import thermometer from "@/assets/wi-thermometer.svg";
 
 /**
  * @todo windSpeedConversion should depend on units, now hardcoded to 'metric'
  * @todo maybe divide into smaller components??
  * @todo change onClick event on <li>, now is for testing
- * @todo use umbrella icon for precipitations
  */
 export default function OneCallForecast({
   weather,
@@ -32,11 +32,6 @@ export default function OneCallForecast({
           const tempMin = Math.round(day.temp.min || NaN);
           const tempMax = Math.round(day.temp.max || NaN);
 
-          // TODO: maybe show it, but change day for 'Today'??
-          /* if (dailyDate.getDate() === cityDate.getDate()) {
-            return;
-          } */
-
           return (
             <li
               onClick={() => {
@@ -54,6 +49,7 @@ export default function OneCallForecast({
                     iconDict[day.weather[0].icon] || "wi-na"
                   }`}
                 />{" "}
+                <p className="mt-2 text-[0.9rem]">{day.weather[0].main}</p>
               </div>
 
               {/* temperature, wind speed and precipitation volume */}
@@ -85,27 +81,16 @@ export default function OneCallForecast({
                   </div>
                 </div>
 
-                {/* <p>{day.pop}</p> */}
-
-                {day.snow ? (
-                  <div className="hidden w-full gap-1 sm:flex">
-                    <div
-                      className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}
-                    >
-                      <Image alt="rain" src={snow} width={50} />
-                    </div>
-                    <div className="w-3/4 text-end">{day.snow || 0} mm/h</div>
+                <div className="hidden w-full gap-1 sm:flex">
+                  <div
+                    className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}
+                  >
+                    <Image alt="umbrella" src={umbrella} width={50} />
                   </div>
-                ) : (
-                  <div className="hidden w-full gap-1 sm:flex">
-                    <div
-                      className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}
-                    >
-                      <Image alt="rain" src={rain} width={50} />
-                    </div>
-                    <div className="w-3/4 text-end">{day.rain || 0} mm/h</div>
+                  <div className="w-3/4 text-end">
+                    {day.rain || day.snow || 0} mm/h
                   </div>
-                )}
+                </div>
               </div>
 
               {/* date */}

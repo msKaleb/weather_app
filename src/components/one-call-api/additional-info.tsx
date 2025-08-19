@@ -1,6 +1,7 @@
 import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+// import windDeg from "@/assets/wi-wind-deg.svg";
 import windDeg from "@/assets/wind-direction.svg";
 
 /**
@@ -16,25 +17,36 @@ export default function OneCallAdditionalInfo({
 
   return (
     <div className="border-foreground flex; m-4 grid w-[90%] grid-cols-2 gap-4 rounded-2xl border p-4 sm:max-w-[400px]">
-      <div className="w-2/4; rounded-2xl p-2">
+      <div className="flex flex-col items-center rounded-2xl p-2">
         <p>Precipitation</p>
-        <span className="text-4xl font-bold">
-          {weather.minutely && weather.minutely[0].precipitation > 0
-            ? weather.minutely[0].precipitation.toFixed(1)
-            : 0}
-        </span>
-        mm/h
+        <div>
+          <span className="text-4xl font-bold">
+            {weather.minutely && weather.minutely[0].precipitation > 0
+              ? weather.minutely[0].precipitation.toFixed(1)
+              : 0}
+          </span>
+          mm/h
+        </div>
       </div>
-      <div className="w-2/4; rounded-2xl p-2">
+      <div className="flex flex-col items-center rounded-2xl p-2">
         <p>Wind speed</p>
-        <span className="text-4xl font-bold">
-          {(weather.current.wind_speed * windSpeedConversion).toFixed(1)}
-        </span>
-        km/h
+        <div>
+          <span className="text-4xl font-bold">
+            {(weather.current.wind_speed * windSpeedConversion).toFixed(1)}
+          </span>
+          km/h
+        </div>
       </div>
-      <div className="w-2/4; rounded-2xl p-4">
+      <div className="flex flex-col items-center rounded-2xl p-2">
+        <div>
+          <p>Humidity</p>
+          <span className="text-4xl font-bold">{weather.current.humidity}</span>
+          %
+        </div>
+      </div>
+      <div className="flex flex-col items-center rounded-2xl p-2">
         <p>Wind direction</p>
-        <div className="bg-green-500; border-foreground mt-2 w-[70px] rounded-full border-2;">
+        <div className="border-foreground border-2; m-auto w-[70px] rounded-full">
           <Image
             alt="wind-deg"
             src={windDeg}
@@ -42,7 +54,7 @@ export default function OneCallAdditionalInfo({
             style={{
               transform: `rotate(${weather.current.wind_deg - 180}deg)`,
             }}
-            width={70}
+            width={60}
           />
         </div>
       </div>
