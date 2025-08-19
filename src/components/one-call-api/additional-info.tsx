@@ -17,10 +17,10 @@ export default function OneCallAdditionalInfo({
 
   return (
     <div className="border-foreground flex; m-4 grid w-[90%] grid-cols-2 gap-4 rounded-2xl border p-4 sm:max-w-[400px]">
-      <div className="flex flex-col items-center rounded-2xl p-2">
+      <div className="flex flex-col items-center gap-1 rounded-2xl p-2">
         <p>Precipitation</p>
         <div>
-          <span className="text-4xl font-bold">
+          <span className="mr-1 text-4xl font-bold">
             {weather.minutely && weather.minutely[0].precipitation > 0
               ? weather.minutely[0].precipitation.toFixed(1)
               : 0}
@@ -28,19 +28,21 @@ export default function OneCallAdditionalInfo({
           mm/h
         </div>
       </div>
-      <div className="flex flex-col items-center rounded-2xl p-2">
+      <div className="flex flex-col items-center gap-1 rounded-2xl p-2">
         <p>Wind speed</p>
         <div>
-          <span className="text-4xl font-bold">
+          <span className="mr-1 text-4xl font-bold">
             {(weather.current.wind_speed * windSpeedConversion).toFixed(1)}
           </span>
           km/h
         </div>
       </div>
-      <div className="flex flex-col items-center rounded-2xl p-2">
+      <div className="flex flex-col items-center gap-1 rounded-2xl p-2">
+        <p>Humidity</p>
         <div>
-          <p>Humidity</p>
-          <span className="text-4xl font-bold">{weather.current.humidity}</span>
+          <span className="mr-1 text-4xl font-bold">
+            {weather.current.humidity}
+          </span>
           %
         </div>
       </div>

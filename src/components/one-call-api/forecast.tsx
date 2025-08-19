@@ -25,7 +25,7 @@ export default function OneCallForecast({
 
   return (
     <div className="border-foreground m-4 flex w-[90%] flex-col gap-4 rounded-2xl border px-4 py-4 sm:max-w-[600px] lg:max-w-[800px] lg:min-w-[400px]">
-      <h2 className="pl-4 text-xl font-bold">Forecast for the next week</h2>
+      <h2 className="pl-4 text-xl font-bold text-center">Forecast for the next week</h2>
       <ul className="flex gap-4 overflow-auto sm:mx-auto sm:grid sm:grid-cols-3 sm:items-center lg:grid-cols-4">
         {days.map((day) => {
           const dailyDate = new Date(day.dt * 1000);
@@ -40,7 +40,7 @@ export default function OneCallForecast({
                 );
               }}
               key={day.dt}
-              className="border-foreground flex w-20 flex-shrink-0 flex-col items-center justify-between gap-4 rounded-2xl border p-4 hover:cursor-pointer sm:h-65 sm:w-40"
+              className="border-foreground flex w-20 flex-shrink-0 flex-col items-center justify-between gap-4 rounded-2xl border p-4 hover:cursor-pointer sm:min-h-75 sm:w-40"
             >
               {/* weather icon */}
               <div className="h-1/3 p-2">
@@ -49,18 +49,20 @@ export default function OneCallForecast({
                     iconDict[day.weather[0].icon] || "wi-na"
                   }`}
                 />{" "}
-                <p className="mt-2 text-[0.9rem]">{day.weather[0].main}</p>
+                <p className="mt-2 text-center text-[0.9rem]">
+                  {day.weather[0].main}
+                </p>
               </div>
 
               {/* temperature, wind speed and precipitation volume */}
-              <div className="flex h-1/3 w-full flex-col items-center gap-1">
-                <div className="w-full gap-1 sm:flex">
+              <div className="gap-1; flex h-1/3 w-full flex-col items-center justify-center">
+                <div className="w-full gap-3 sm:flex">
                   <div
                     className={`${resolvedTheme === "dark" && "svg-dark"} hidden w-1/4 sm:inline`}
                   >
                     <Image alt="temp" src={thermometer} width={40} />
                   </div>
-                  <div className="hidden w-3/4 justify-end whitespace-pre sm:flex">
+                  <div className="hidden w-3/4 justify-start whitespace-pre sm:flex">
                     {tempMin}° / {tempMax}°
                   </div>
                   <div className="inline whitespace-pre sm:hidden">
@@ -69,25 +71,25 @@ export default function OneCallForecast({
                   </div>
                 </div>
 
-                <div className="hidden w-full gap-1 sm:flex">
+                <div className="hidden w-full gap-3 sm:flex">
                   <div
                     className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}
                   >
                     <Image alt="wind" src={wind} width={40} />
                   </div>
-                  <div className="w-3/4 text-end">
+                  <div className="text-end; w-3/4">
                     {(day.wind_speed * windSpeedConversion).toFixed(1) || 0}{" "}
                     km/h
                   </div>
                 </div>
 
-                <div className="hidden w-full gap-1 sm:flex">
+                <div className="hidden w-full gap-3 sm:flex">
                   <div
                     className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}
                   >
                     <Image alt="umbrella" src={umbrella} width={50} />
                   </div>
-                  <div className="w-3/4 text-end">
+                  <div className="text-end; w-3/4">
                     {day.rain || day.snow || 0} mm/h
                   </div>
                 </div>
@@ -95,9 +97,17 @@ export default function OneCallForecast({
 
               {/* date */}
               {dailyDate.getDate() === cityDate.getDate() ? (
-                <div className="flex h-1/3 flex-col justify-center">Today</div>
+                <div className="flex h-1/3 flex-col justify-start">
+                  <p>Today</p>
+                  <p className="text-center text-[0.9rem]">
+                    {dailyDate.toLocaleDateString(undefined, {
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
+                  </p>
+                </div>
               ) : (
-                <div className="flex h-1/3 flex-col justify-center">
+                <div className="flex h-1/3 flex-col justify-start">
                   <p className="text-center">
                     {dailyDate.toLocaleDateString(undefined, {
                       weekday: "short",
