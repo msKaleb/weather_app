@@ -7,6 +7,7 @@ import umbrella from "@/assets/wi-umbrella.svg";
 import snow from "@/assets/wi-snowflake-cold.svg";
 import rain from "@/assets/wi-raindrop.svg";
 import thermometer from "@/assets/wi-thermometer.svg";
+import { frameClass } from "@/data/constants";
 
 /**
  * @todo windSpeedConversion should depend on units, now hardcoded to 'metric'
@@ -24,8 +25,10 @@ export default function OneCallForecast({
   const windSpeedConversion = 3.6;
 
   return (
-    <div className="border-foreground m-4 flex w-[90%] flex-col gap-4 rounded-2xl border px-4 py-4 sm:max-w-[600px] lg:max-w-[800px] lg:min-w-[400px]">
-      <h2 className="pl-4 text-xl font-bold text-center">Forecast for the next week</h2>
+    <div className={`${frameClass} m-4 flex flex-col gap-4 p-4`}>
+      <h2 className="pl-4 text-center text-xl font-bold">
+        Forecast for the next week
+      </h2>
       <ul className="flex gap-4 overflow-auto sm:mx-auto sm:grid sm:grid-cols-3 sm:items-center lg:grid-cols-4">
         {days.map((day) => {
           const dailyDate = new Date(day.dt * 1000);
