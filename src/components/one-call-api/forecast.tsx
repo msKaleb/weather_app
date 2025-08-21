@@ -4,8 +4,8 @@ import { iconDict } from "@/app/dictionary";
 import { useTheme } from "next-themes";
 import wind from "@/assets/wi-strong-wind.svg";
 import umbrella from "@/assets/wi-umbrella.svg";
-import snow from "@/assets/wi-snowflake-cold.svg";
-import rain from "@/assets/wi-raindrop.svg";
+// import snow from "@/assets/wi-snowflake-cold.svg";
+// import rain from "@/assets/wi-raindrop.svg";
 import thermometer from "@/assets/wi-thermometer.svg";
 import { frameClass } from "@/data/constants";
 
@@ -58,7 +58,7 @@ export default function OneCallForecast({
               </div>
 
               {/* temperature, wind speed and precipitation volume */}
-              <div className="gap-1; flex h-1/3 w-full flex-col items-center justify-center">
+              <div className="flex h-1/3 w-full flex-col items-center justify-center">
                 <div className="w-full gap-3 sm:flex">
                   <div
                     className={`${resolvedTheme === "dark" && "svg-dark"} hidden w-1/4 sm:inline`}

@@ -15,18 +15,21 @@ export default async function Home({
   searchParams: Promise<{ city?: string; lat?: number; lon?: number }>;
 }) {
   const params = await searchParams;
-  let city = params?.city || undefined;
+  let city: string | undefined | null = params?.city || undefined;
   let lat = params?.lat || null;
   let lon = params?.lon || null;
 
   if ((!lat || !lon) && city) {
     const cities: geoCodingType[] | null = await getGeoCodeCities(city);
 
-    if (cities && cities.length > 0) {
+    if (cities.length > 0) {
       city = `${cities[0].name}, ${cities[0].country}`;
       lat = cities[0].lat;
       lon = cities[0].lon;
+    } else {
+      city = null;
     }
+    console.log("page.tsx, setting city to ", city); // debugging
   }
 
   return (

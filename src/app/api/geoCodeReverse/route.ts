@@ -7,22 +7,24 @@ import { getOPENWEATHER_API_KEY } from "@/lib/actions";
  */
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const query = searchParams.get("q") || "";
+  const lat = searchParams.get("lat") || null;
+  const lon = searchParams.get("lon") || null;
   const apikey = getOPENWEATHER_API_KEY();
-  const geoCodeUrl = "http://api.openweathermap.org/geo/1.0/direct?q=";
+  const geoCodeUrl = "http://api.openweathermap.org/geo/1.0/reverse?";
 
+  //   console.log(`Coords: {${lat}, ${lon}}`) // debugging
   try {
     const response = await fetch(
-      `${geoCodeUrl}${query}&limit=10&appid=${apikey}`,
+      `${geoCodeUrl}lat=${lat}&lon=${lon}&limit=1&appid=${apikey}`,
       {
         cache: "force-cache",
-        next: { revalidate: 600, tags: ["geoCodeAPI"] },
+        next: { revalidate: 600, tags: ["geoCodeReverseAPI"] },
       },
     );
     const data: geoCodingType[] = await response.json();
 
-    console.log("Returning city list from geoCode...", data); // debugging
-    return NextResponse.json(data);
+    console.log("Returning city from geoCodeReverse...", data[0].name); // debugging
+    return NextResponse.json(data[0]);
   } catch (error) {
     console.error("Geocoding API error:", error);
     return NextResponse.json(

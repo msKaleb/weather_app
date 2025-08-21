@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import OneCallCurrentWeather from "./one-call-api/current-weather";
 import OneCallAdditionalInfo from "./one-call-api/additional-info";
 import OneCallForecast from "./one-call-api/forecast";
+import { geoCodingType } from "@/lib/types";
 
 /**
  * @description retrieves weather info from Open Weather API
@@ -13,34 +14,115 @@ export default function OneCallAPIComponent({
   lat,
   lon,
 }: {
-  city?: string | undefined;
+  city?: string | undefined | null;
   lat: number | null;
   lon: number | null;
 }) {
   const [weather, setWeather] = useState<
     OpenWeatherOneCallType | undefined | null
   >(undefined);
+  const [gCity, setGCity] = useState<string | undefined | null>(city);
+  const [{ gLat, gLon }, setCoords] = useState<{
+    [index: string]: number | null;
+  }>({ gLat: lat, gLon: lon });
 
   useEffect(() => {
+    // if a city is provided, we don't need to geoLocate
+    if (city) {
+      return;
+    }
+
+    const getUserPosition = async () => {
+      // return a promise with current location
+      const getPosition = () =>
+        new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+
+      try {
+        const position = await getPosition();
+        // my api endpoint, uses an api key
+        const geoCodeReverseQuery = `/api/geoCodeReverse?lat=${
+          position.coords.latitude
+        }&lon=${position.coords.longitude}`;
+
+        const response = await fetch(geoCodeReverseQuery);
+        const geoCodeReverseCity: geoCodingType = await response.json();
+
+        setGCity(`${geoCodeReverseCity.name}, ${geoCodeReverseCity.country}`);
+        setCoords({
+          gLat: position.coords.latitude,
+          gLon: position.coords.longitude,
+        });
+      } catch (error) {
+        if (error instanceof GeolocationPositionError) {
+          console.warn(`Geolocation unavailable`);
+        } else {
+          console.error(`Error: ${error}`);
+        }
+      }
+    };
+    getUserPosition();
+  }, []);
+
+  /* useEffect(() => {
     const fetchWeather = async () => {
-      if (!city) {
+      // wait until we have actual coordinates
+      const fetchLat = lat ?? gLat;
+      const fetchLon = lon ?? gLon;
+      alert(`${fetchLat} - ${fetchLon} = ${city}`);
+
+      if (city === null) {
+        setWeather(null);
+      } else if (!fetchLat || !fetchLon) {
         setWeather(undefined);
         return;
       }
+
       try {
-        // /api/oneCall is my endpoint, created to fetch data with api key
-        const uriQuery = `/api/oneCall?lat=${lat}&lon=${lon}`;
+        const uriQuery = `/api/oneCall?lat=${fetchLat}&lon=${fetchLon}`;
         const response = await fetch(uriQuery);
         const weather: OpenWeatherOneCallType = await response.json();
         setWeather(weather);
       } catch (error) {
         setWeather(null);
-        // console.error("Error on OneCallAPIComponent useEffect()!", error); // debugging
+        console.error("Error fetching weather:", error);
       }
     };
 
     fetchWeather();
-  }, [city]);
+
+    return () => {
+      setCoords({ gLat: null, gLon: null });
+    };
+  }, [lat, lon, gLat, gLon]); */
+
+  // old version
+  useEffect(() => {
+    const fetchWeather = async () => {
+      // alert(`${city}, ${gCity}`);
+      if (!city && !gCity) {
+        setWeather(city as null | undefined);
+        return;
+      }
+      if (city === null) {
+        setWeather(null);
+        return;
+      }
+      try {
+        // /api/oneCall is my endpoint, created to fetch data with api key
+        const uriQuery = `/api/oneCall?lat=${lat ?? gLat}&lon=${lon ?? gLon}`;
+        const response = await fetch(uriQuery);
+        const weather: OpenWeatherOneCallType = await response.json();
+        setWeather(weather);
+      } catch (error) {
+        setWeather(null);
+        console.error("Error on OneCallAPIComponent useEffect()!", error); // debugging
+      }
+    };
+
+    fetchWeather();
+  }, [city, gCity]);
 
   if (weather === undefined) {
     return <p className="text-primary text-2xl">Enter a city name</p>;
@@ -49,13 +131,14 @@ export default function OneCallAPIComponent({
       <p className="text-destructive text-2xl">Error fetching weather data.</p>
     );
   }
-  const days = weather.daily;
-  const cityDate = new Date(weather.current.dt * 1000);
-  // use 'city?.split(", ")[1]' as locale for city's own locale
+  // const days = weather.daily;
+  // const cityDate = new Date(weather.current.dt * 1000);
+
+  // use 'city?.split(", ")[1]' as locale for city's own locale ====================================
 
   return (
     <>
-      <OneCallCurrentWeather city={city} weather={weather} />
+      <OneCallCurrentWeather city={city || gCity} weather={weather} />
       <OneCallAdditionalInfo weather={weather} />
       <OneCallForecast weather={weather} />
     </>

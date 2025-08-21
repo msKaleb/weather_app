@@ -10,9 +10,13 @@ export default function OneCallCurrentWeather({
   weather,
   city,
 }: {
-  weather: OpenWeatherOneCallType;
-  city: string | undefined;
+  weather: OpenWeatherOneCallType | undefined | null;
+  city: string | undefined | null;
 }) {
+  if (!weather) {
+    return;
+  }
+
   const currentWeather = weather?.current.weather[0];
   const cityDate = new Date(weather.current.dt * 1000);
   const degrees: TempUnit = "°C";
@@ -25,7 +29,7 @@ export default function OneCallCurrentWeather({
   const regionNames = new Intl.DisplayNames(navigator.language, {
     type: "region",
   });
-  const countryCode = city?.split(",")[1].trim() || "";
+  const countryCode = city?.split(",")[1]?.trim() || "";
   const countryName = countryCode && regionNames.of(countryCode);
   const displayedCity = `${city?.split(",")[0].trim()}${countryName && ", "}${countryName}`;
 

@@ -93,8 +93,6 @@ export default function CityCombobox() {
             const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
               query.trim(),
             )}`;
-            /* const { data: geoData }: { data: geoCodingType[] } =
-              await axios.get(geoCodeQuery); */
             const response = await fetch(geoCodeQuery);
             const geoData: geoCodingType[] = await response.json();
 
