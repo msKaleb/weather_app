@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useRef } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
-import { inputClass } from "@/data/constants";
+import { inputClass } from "@/data/tw-styles";
 import { cityType, geoCodingType } from "@/lib/types";
 // import axios from "axios";
 import { useCombobox } from "downshift";

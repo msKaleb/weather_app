@@ -141,3 +141,8 @@
 .svg-dark {
   filter: invert(1) hue-rotate(180deg);
 }
+
+.selected-day {
+  background-color: var(--background);
+  filter: invert(0.1) hue-rotate(180deg);
+}

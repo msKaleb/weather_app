@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 // import windDeg from "@/assets/wi-wind-deg.svg";
 import windDeg from "@/assets/wind-direction.svg";
-import { frameClass } from "@/data/constants";
+import { frameClass } from "@/data/tw-styles";
 
 /**
  * @todo windSpeedConversion should depend on units, now hardcoded to 'metric'

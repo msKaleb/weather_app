@@ -65,39 +65,6 @@ export default function OneCallAPIComponent({
     getUserPosition();
   }, []);
 
-  /* useEffect(() => {
-    const fetchWeather = async () => {
-      // wait until we have actual coordinates
-      const fetchLat = lat ?? gLat;
-      const fetchLon = lon ?? gLon;
-      alert(`${fetchLat} - ${fetchLon} = ${city}`);
-
-      if (city === null) {
-        setWeather(null);
-      } else if (!fetchLat || !fetchLon) {
-        setWeather(undefined);
-        return;
-      }
-
-      try {
-        const uriQuery = `/api/oneCall?lat=${fetchLat}&lon=${fetchLon}`;
-        const response = await fetch(uriQuery);
-        const weather: OpenWeatherOneCallType = await response.json();
-        setWeather(weather);
-      } catch (error) {
-        setWeather(null);
-        console.error("Error fetching weather:", error);
-      }
-    };
-
-    fetchWeather();
-
-    return () => {
-      setCoords({ gLat: null, gLon: null });
-    };
-  }, [lat, lon, gLat, gLon]); */
-
-  // old version
   useEffect(() => {
     const fetchWeather = async () => {
       // alert(`${city}, ${gCity}`);
@@ -131,10 +98,6 @@ export default function OneCallAPIComponent({
       <p className="text-destructive text-2xl">Error fetching weather data.</p>
     );
   }
-  // const days = weather.daily;
-  // const cityDate = new Date(weather.current.dt * 1000);
-
-  // use 'city?.split(", ")[1]' as locale for city's own locale ====================================
 
   return (
     <>

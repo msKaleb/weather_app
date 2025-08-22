@@ -33,6 +33,7 @@ export default function OneCallCurrentWeather({
   const countryName = countryCode && regionNames.of(countryCode);
   const displayedCity = `${city?.split(",")[0].trim()}${countryName && ", "}${countryName}`;
 
+  // use 'city?.split(", ")[1]' as locale for city's own locale ====================================
   return (
     <div className="flex flex-col items-center gap-4 px-4 sm:min-w-60 sm:flex-row sm:justify-around sm:gap-8">
       <i className={`${iconClass} weather-icon`}></i>
