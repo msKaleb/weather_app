@@ -7,6 +7,7 @@ import OneCallForecast from "./one-call-api/forecast";
 import { geoCodingType } from "@/lib/types";
 
 /**
+ * @todo change placeholder for a frame with relevant data
  * @description retrieves weather info from Open Weather API
  */
 export default function OneCallAPIComponent({
@@ -18,6 +19,7 @@ export default function OneCallAPIComponent({
   lat: number | null;
   lon: number | null;
 }) {
+  const [selectedDay, setSelectedDay] = useState(0);
   const [weather, setWeather] = useState<
     OpenWeatherOneCallType | undefined | null
   >(undefined);
@@ -33,7 +35,7 @@ export default function OneCallAPIComponent({
     }
 
     const getUserPosition = async () => {
-      // return a promise with current location
+      // returns a promise with current location
       const getPosition = () =>
         new Promise<GeolocationPosition>((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -67,7 +69,6 @@ export default function OneCallAPIComponent({
 
   useEffect(() => {
     const fetchWeather = async () => {
-      // alert(`${city}, ${gCity}`);
       if (!city && !gCity) {
         setWeather(city as null | undefined);
         return;
@@ -103,7 +104,21 @@ export default function OneCallAPIComponent({
     <>
       <OneCallCurrentWeather city={city || gCity} weather={weather} />
       <OneCallAdditionalInfo weather={weather} />
-      <OneCallForecast weather={weather} />
+      {/* this is a placeholder */}
+      <p className="text-center">
+        <span className="font-bold">
+          {new Date(weather.daily[selectedDay].dt * 1000).toLocaleString(
+            undefined,
+            { dateStyle: "medium" },
+          )}
+        </span>
+        : {weather.daily[selectedDay].summary}
+      </p>
+      <OneCallForecast
+        weather={weather}
+        selectedDay={selectedDay}
+        onChange={(day) => setSelectedDay(day)}
+      />
     </>
   );
 }
