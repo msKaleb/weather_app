@@ -26,7 +26,7 @@ export default function OneCallCurrentWeather({
     .map((word) => word[0].toLocaleUpperCase() + word.slice(1))
     .join(" ");
 
-  const regionNames = new Intl.DisplayNames(navigator.language, {
+  const regionNames = new Intl.DisplayNames("en-GB", {
     type: "region",
   });
   const countryCode = city?.split(",")[1]?.trim() || "";
@@ -46,7 +46,7 @@ export default function OneCallCurrentWeather({
         <br />
 
         <h2 className="text-2xl font-bold">
-          {cityDate.toLocaleDateString(navigator.language, {
+          {cityDate.toLocaleDateString("en-GB", {
             weekday: "long",
             month: "long",
             day: "2-digit",
@@ -54,10 +54,7 @@ export default function OneCallCurrentWeather({
         </h2>
         <div>
           <span className="text-xl font-bold">Local time: </span>
-          <Clock
-            timeZone={weather.timezone}
-            locale={navigator.language || city?.split(", ")[1]}
-          />
+          <Clock timeZone={weather.timezone} locale="en-GB" />
         </div>
         <br />
 

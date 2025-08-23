@@ -1,4 +1,3 @@
-
 export default function DailyWeatherDate({
   dailyDate,
   currentDate,
@@ -12,7 +11,7 @@ export default function DailyWeatherDate({
         <div className="flex h-1/3 flex-col justify-start">
           <p>Today</p>
           <p className="text-center text-[0.9rem]">
-            {dailyDate.toLocaleDateString(undefined, {
+            {dailyDate.toLocaleDateString("en-GB", {
               month: "2-digit",
               day: "2-digit",
             })}
@@ -21,12 +20,12 @@ export default function DailyWeatherDate({
       ) : (
         <div className="flex h-1/3 flex-col justify-start">
           <p className="text-center">
-            {dailyDate.toLocaleDateString(undefined, {
+            {dailyDate.toLocaleDateString("en-GB", {
               weekday: "short",
             })}
           </p>
           <p className="text-center text-[0.9rem]">
-            {dailyDate.toLocaleDateString(undefined, {
+            {dailyDate.toLocaleDateString("en-GB", {
               month: "2-digit",
               day: "2-digit",
             })}
