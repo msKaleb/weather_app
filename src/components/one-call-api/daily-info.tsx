@@ -11,6 +11,12 @@ export default function DailyWeatherInfo({ day }: { day: DailyForecast }) {
   const tempMax = Math.round(day.temp.max || NaN);
   const windSpeedConversion = 3.6;
 
+  function formatPrecipitation(value?: number) {
+    if (!value) return 0;
+    if (value > 999) return value;
+    return value.toPrecision(3);
+  }
+
   return (
     <div className="flex h-1/3 w-full flex-col items-center justify-center">
       {/* temperature ranges */}
@@ -34,7 +40,7 @@ export default function DailyWeatherInfo({ day }: { day: DailyForecast }) {
         <div className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}>
           <Image alt="wind" src={wind} width={40} />
         </div>
-        <div className="text-end; w-3/4">
+        <div className="w-3/4">
           {(day.wind_speed * windSpeedConversion).toFixed(1) || 0} km/h
         </div>
       </div>
@@ -44,7 +50,9 @@ export default function DailyWeatherInfo({ day }: { day: DailyForecast }) {
         <div className={`${resolvedTheme === "dark" && "svg-dark"} w-1/4`}>
           <Image alt="umbrella" src={umbrella} width={50} />
         </div>
-        <div className="text-end; w-3/4">{day.rain || day.snow || 0} mm/h</div>
+        <p className="w-3/4">
+          {formatPrecipitation(day.snow) || formatPrecipitation(day.rain) || 0} mm/h
+        </p>
       </div>
     </div>
   );

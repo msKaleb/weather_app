@@ -5,6 +5,8 @@ import OneCallCurrentWeather from "./one-call-api/current-weather";
 import OneCallAdditionalInfo from "./one-call-api/additional-info";
 import OneCallForecast from "./one-call-api/forecast";
 import { geoCodingType } from "@/lib/types";
+import { frameClass } from "@/data/tw-styles";
+import DayTemperatures from "./one-call-api/day-temperatures";
 
 /**
  * @todo change placeholder for a frame with relevant data
@@ -19,6 +21,7 @@ export default function OneCallAPIComponent({
   lat: number | null;
   lon: number | null;
 }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(0);
   const [weather, setWeather] = useState<
     OpenWeatherOneCallType | undefined | null
@@ -68,6 +71,7 @@ export default function OneCallAPIComponent({
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchWeather = async () => {
       if (!city && !gCity) {
         setWeather(city as null | undefined);
@@ -89,10 +93,16 @@ export default function OneCallAPIComponent({
       }
     };
 
-    fetchWeather();
+    // TODO: remove timeout
+    setTimeout(() => {
+      fetchWeather();
+      setIsLoading(false);
+    }, 0);
   }, [city, gCity]);
 
-  if (weather === undefined) {
+  if (isLoading) {
+    return <p>Loading...</p>;
+  } else if (weather === undefined) {
     return <p className="text-primary text-2xl">Enter a city name</p>;
   } else if (weather === null) {
     return (
@@ -104,16 +114,7 @@ export default function OneCallAPIComponent({
     <>
       <OneCallCurrentWeather city={city || gCity} weather={weather} />
       <OneCallAdditionalInfo weather={weather} />
-      {/* this is a placeholder */}
-      <p className="text-center">
-        <span className="font-bold">
-          {new Date(weather.daily[selectedDay].dt * 1000).toLocaleString(
-            undefined,
-            { dateStyle: "medium" },
-          )}
-        </span>
-        : {weather.daily[selectedDay].summary}
-      </p>
+      <DayTemperatures day={weather.daily[selectedDay]} />
       <OneCallForecast
         weather={weather}
         selectedDay={selectedDay}

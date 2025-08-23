@@ -31,14 +31,20 @@ export default function OneCallCurrentWeather({
   });
   const countryCode = city?.split(",")[1]?.trim() || "";
   const countryName = countryCode && regionNames.of(countryCode);
-  const displayedCity = `${city?.split(",")[0].trim()}${countryName && ", "}${countryName}`;
+  // const displayedCity = `${city?.split(",")[0].trim()}${countryName && ", "}${countryName}`;
+  const displayedCity = `${city?.split(",")[0].trim()}`;
 
   // use 'city?.split(", ")[1]' as locale for city's own locale ====================================
   return (
-    <div className="flex flex-col items-center gap-4 px-4 sm:min-w-60 sm:flex-row sm:justify-around sm:gap-8">
+    <div className="flex flex-col items-center gap-8 px-4 sm:min-w-60 sm:flex-row sm:justify-around sm:gap-20">
       <i className={`${iconClass} weather-icon`}></i>
       <div>
-        <h1 className="text-3xl font-bold">{displayedCity}</h1>
+        <h1 className="text-3xl font-bold">
+          {displayedCity}
+          <span className="font-normal"> ({countryName})</span>
+        </h1>
+        <br />
+
         <h2 className="text-2xl font-bold">
           {cityDate.toLocaleDateString(navigator.language, {
             weekday: "long",
@@ -46,7 +52,6 @@ export default function OneCallCurrentWeather({
             day: "2-digit",
           })}
         </h2>
-        <h2 className="text-2xl font-bold">{description}</h2>
         <div>
           <span className="text-xl font-bold">Local time: </span>
           <Clock
@@ -54,6 +59,9 @@ export default function OneCallCurrentWeather({
             locale={navigator.language || city?.split(", ")[1]}
           />
         </div>
+        <br />
+
+        <h2 className="text-2xl font-bold">{description}</h2>
         <p className="text-4xl">
           {weather.current.temp.toFixed(1)}
           {degrees}

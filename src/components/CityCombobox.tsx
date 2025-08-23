@@ -5,9 +5,7 @@ import { useState, useRef } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/tw-styles";
 import { cityType, geoCodingType } from "@/lib/types";
-// import axios from "axios";
 import { useCombobox } from "downshift";
-// import { getGeoCodeCities } from "@/lib/actions";
 
 export default function CityCombobox() {
   const buttonRef = useRef<HTMLButtonElement>(null);
