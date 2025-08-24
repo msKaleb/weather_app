@@ -29,7 +29,7 @@ export default async function Home({
     } else {
       city = null;
     }
-    console.log("page.tsx, setting city to ", city); // debugging
+    // console.log("page.tsx, setting city to ", city); // debugging
   }
 
   return (

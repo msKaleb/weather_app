@@ -3,7 +3,7 @@ import { geoCodingType } from "@/lib/types";
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 
 /**
- * @description this endpoint returns the matching cities using geoCode API
+ * @description this endpoint returns the matching city using geoCode reverse API
  */
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     );
     const data: geoCodingType[] = await response.json();
 
-    console.log("Returning city from geoCodeReverse...", data[0].name); // debugging
+    // console.log("Returning city from geoCodeReverse...", data[0].name); // debugging
     return NextResponse.json(data[0]);
   } catch (error) {
     console.error("Geocoding API error:", error);

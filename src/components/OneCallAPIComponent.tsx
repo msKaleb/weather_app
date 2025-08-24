@@ -9,7 +9,6 @@ import { frameClass } from "@/data/tw-styles";
 import DayTemperatures from "./one-call-api/day-temperatures";
 
 /**
- * @todo change placeholder for a frame with relevant data
  * @description retrieves weather info from Open Weather API
  */
 export default function OneCallAPIComponent({
@@ -31,9 +30,11 @@ export default function OneCallAPIComponent({
     [index: string]: number | null;
   }>({ gLat: lat, gLon: lon });
 
+  // executed on first mount, uses geolocation if allowed ==========================================
   useEffect(() => {
     // if a city is provided, we don't need to geoLocate
     if (city) {
+      setGCity(undefined);
       return;
     }
 
@@ -70,13 +71,17 @@ export default function OneCallAPIComponent({
     getUserPosition();
   }, []);
 
+  // executed each time city or gCity (geolocated city) changes ====================================
   useEffect(() => {
     setIsLoading(true);
+
     const fetchWeather = async () => {
+      // check for geolocation
       if (!city && !gCity) {
         setWeather(city as null | undefined);
         return;
       }
+      // check for city not found
       if (city === null) {
         setWeather(null);
         return;
@@ -89,16 +94,17 @@ export default function OneCallAPIComponent({
         setWeather(weather);
       } catch (error) {
         setWeather(null);
-        console.error("Error on OneCallAPIComponent useEffect()!", error); // debugging
+        console.error("Error on OneCallAPI: ", error); // debugging
       }
     };
 
-    // TODO: remove timeout
-    setTimeout(() => {
-      fetchWeather();
-      setIsLoading(false);
-    }, 0);
+    fetchWeather();
+    setIsLoading(false);
   }, [city, gCity]);
+
+  /* console.log(
+    `weather: ${weather?.current.temp}º, gCity: ${gCity}, city: ${city}`,
+  ); // debugging */
 
   if (isLoading) {
     return <p>Loading...</p>;

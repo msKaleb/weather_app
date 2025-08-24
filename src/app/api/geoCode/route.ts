@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     );
     const data: geoCodingType[] = await response.json();
 
-    console.log("Returning city list from geoCode...", data); // debugging
+    // console.log("Returning city list from geoCode...", data); // debugging
     return NextResponse.json(data);
   } catch (error) {
     console.error("Geocoding API error:", error);

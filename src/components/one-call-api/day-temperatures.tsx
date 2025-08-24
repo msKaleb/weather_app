@@ -14,14 +14,13 @@ export default function DayTemperatures({ day }: { day: DailyForecast }) {
     <div className={`${frameClass} m-4 flex flex-col items-center gap-4 p-4`}>
       <div>
         <p className="text-center text-xl font-bold">
-          {new Date(day.dt * 1000).toLocaleString(undefined, {
+          {new Date(day.dt * 1000).toLocaleDateString("en-GB", {
             dateStyle: "long",
           })}
         </p>
         <p className="text-center">{day.summary}</p>
       </div>
 
-      {/* <p className="text-center font-bold">Temperature throughout the day</p> */}
       <div className="flex w-full justify-around">
         <div id="morning">
           <Image

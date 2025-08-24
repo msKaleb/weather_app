@@ -2,8 +2,6 @@ import { geoCodingType, weatherType } from "./types";
 import { VCWeatherType } from "./visualCrossingType";
 import axios from "axios";
 
-// TODO: change axios for standard fetch() (cache)
-
 export function getOPENWEATHER_API_KEY() {
   return process.env.OPENWEATHER_API_KEY;
 }
@@ -29,7 +27,7 @@ export async function fetchWeatherData(
 }
 
 /**
- * @todo change axios for standard fetch() (cache)
+ * @todo change axios for standard fetch() (cache), not being used now
  */
 export async function fetchVCWeatherData(
   city: string | undefined,
@@ -52,7 +50,6 @@ export async function fetchVCWeatherData(
 }
 
 /**
- * @todo use fetch(url, {cache....})
  * @param city
  * @returns an array of matching cities
  */
@@ -61,16 +58,16 @@ export async function getGeoCodeCities(city: string): Promise<geoCodingType[]> {
   const geoCodeUrl = "http://api.openweathermap.org/geo/1.0/direct?q=";
 
   try {
-    /* const { data }: { data: geoCodingType[] } = await axios.get(
+    const response = await fetch(
       `${geoCodeUrl}${city}&limit=10&appid=${apikey}`,
-    ); */
-    const response = await fetch(`${geoCodeUrl}${city}&limit=10&appid=${apikey}`, {
-      cache: "force-cache",
-      next: { revalidate: 600 },
-    }); // tags?
+      {
+        cache: "force-cache",
+        next: { revalidate: 600 },
+      },
+    ); // tags?
     const data: geoCodingType[] = await response.json();
 
-    console.log(`reaching...\n${geoCodeUrl}${city}&limit=10&appid=${apikey}`); // debugging
+    // console.log(`reaching...\n${geoCodeUrl}${city}&limit=10&appid=${apikey}`); // debugging
     return data;
   } catch (error) {
     console.error("Error fetching matching cities:", error);

@@ -2,11 +2,10 @@ import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { NextRequest, NextResponse } from "next/server";
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 import { LanguageCode } from "@/lib/types";
-// import axios from "axios";
 
 /**
  * @todo select desired units, language, etc. Via context to client, then via request?
- * @description
+ * @description api endpoint for fetching the forecast
  */
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -35,10 +34,8 @@ export async function GET(req: NextRequest) {
       "&lang=" +
       lang;
 
-    console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
+    // console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
 
-    /* const { data: weather }: { data: OpenWeatherOneCallType } =
-      await axios.get(oneCallAPIRequest); */
     const response = await fetch(oneCallAPIRequest, {
       cache: "force-cache",
       next: { revalidate: 600, tags: ["oneCallAPI"] },

@@ -10,9 +10,7 @@ import DailyWeatherDate from "./daily-date";
 import { cn } from "@/lib/utils";
 
 /**
- * @todo windSpeedConversion should depend on units, now hardcoded to 'metric'
- * @todo maybe divide into smaller components??
- * @todo change onClick event on <li>, now is for testing
+ * @description shows an 8-day forecast
  */
 export default function OneCallForecast({
   weather,
@@ -29,9 +27,9 @@ export default function OneCallForecast({
   return (
     <div className={`${frameClass} m-4 flex flex-col gap-4 p-4`}>
       <h2 className="pl-4 text-center text-xl font-bold">
-        Forecast for the next week
+        8-day weather forecast
       </h2>
-      <ul className="flex gap-4 overflow-auto sm:mx-auto sm:grid sm:grid-cols-3 sm:items-center lg:grid-cols-4">
+      <ul className="flex gap-4 overflow-x-scroll sm:mx-auto sm:grid sm:grid-cols-3 sm:items-center lg:grid-cols-4">
         {days.map((day, index) => (
           <li
             onClick={() => onChange(index)}
