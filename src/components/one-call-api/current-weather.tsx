@@ -1,10 +1,12 @@
 import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { iconDict } from "@/app/dictionary";
 import { TempUnit } from "@/lib/types";
+import { RefreshCw } from "lucide-react";
 import Clock from "@/components/clock";
 
 /**
  * @todo degrees should be selected by the user, now hardcoded to "°C"
+ * @todo try to avoid refreshing the whole page in refreshData()
  */
 export default function OneCallCurrentWeather({
   weather,
@@ -16,6 +18,15 @@ export default function OneCallCurrentWeather({
   if (!weather) {
     return;
   }
+
+  const refreshData = async () => {
+    try {
+      await fetch("/api/oneCall/", { method: "POST" });
+      window.location.reload();
+    } catch (error) {
+      console.error("Error refreshing data: ", error);
+    }
+  };
 
   const currentWeather = weather?.current.weather[0];
   const cityDate = new Date(weather.current.dt * 1000);
@@ -31,12 +42,11 @@ export default function OneCallCurrentWeather({
   });
   const countryCode = city?.split(",")[1]?.trim() || "";
   const countryName = countryCode && regionNames.of(countryCode);
-  // const displayedCity = `${city?.split(",")[0].trim()}${countryName && ", "}${countryName}`;
   const displayedCity = `${city?.split(",")[0].trim()}`;
 
   // use 'city?.split(", ")[1]' as locale for city's own locale ====================================
   return (
-    <div className="flex flex-col items-center gap-8 px-4 sm:min-w-60 sm:flex-row sm:justify-around sm:gap-20">
+    <div className="flex flex-col items-center gap-8 px-4 text-center sm:min-w-60 sm:flex-row sm:justify-around sm:gap-20 sm:text-start">
       <i className={`${iconClass} weather-icon`}></i>
       <div>
         <h1 className="text-3xl font-bold">
@@ -53,8 +63,15 @@ export default function OneCallCurrentWeather({
           })}
         </h2>
         <div>
-          <span className="text-xl font-bold">Local time: </span>
+          <span className="text-xl font-bold">{displayedCity} time: </span>
           <Clock timeZone={weather.timezone} locale="en-GB" />
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <p>
+              <span className="text-xl font-bold">Last updated: </span>
+              {cityDate.toTimeString().split(" ")[0]}
+            </p>
+            <RefreshCw className="hover:cursor-pointer" onClick={refreshData} />
+          </div>
         </div>
         <br />
 

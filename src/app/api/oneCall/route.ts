@@ -2,6 +2,7 @@ import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { NextRequest, NextResponse } from "next/server";
 import { getOPENWEATHER_API_KEY } from "@/lib/actions";
 import { LanguageCode } from "@/lib/types";
+import { revalidateTag } from "next/cache";
 
 /**
  * @todo select desired units, language, etc. Via context to client, then via request?
@@ -37,7 +38,7 @@ export async function GET(req: NextRequest) {
     // console.log(`reaching...\n${oneCallAPIRequest}`); // debugging
 
     const response = await fetch(oneCallAPIRequest, {
-      cache: "force-cache",
+      // cache: "force-cache",
       next: { revalidate: 600, tags: ["oneCallAPI"] },
     });
     const data: OpenWeatherOneCallType = await response.json();
@@ -50,5 +51,17 @@ export async function GET(req: NextRequest) {
       { error: "Failed to fetch weather data." },
       { status: 500 },
     );
+  }
+}
+
+/**
+ * @description the POST method refreshes the cached weather
+ */
+export async function POST() {
+  try {
+    revalidateTag("oneCallAPI");
+    return NextResponse.json({ revalidated: true });
+  } catch {
+    return NextResponse.json({ revalidated: false });
   }
 }

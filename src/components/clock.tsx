@@ -25,5 +25,4 @@ export default function Clock({
       {time.toLocaleTimeString(locale, { timeZone: timeZone })}
     </span>
   );
-  //   return <p>{time.getHours()}:{time.getMinutes()}:{time.getSeconds()}</p>
 }

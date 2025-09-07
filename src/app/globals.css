@@ -46,7 +46,8 @@
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);
-  --foreground: rgb(9, 9, 11);
+  --mid-background: oklch(0.6993 0 0);
+  --foreground: oklch(0.1408 0.0044 285.82);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
@@ -80,6 +81,7 @@
 
 .dark {
   --background: oklch(0.141 0.005 285.823);
+  --mid-background: oklch(0.4354 0.0459 284.33);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
   --card-foreground: oklch(0.985 0 0);
@@ -143,6 +145,7 @@
 }
 
 .selected-day {
-  background-color: var(--background);
-  filter: invert(0.1) hue-rotate(180deg);
+  /* background-color: var(--background); */
+  /* filter: invert(0.1) hue-rotate(180deg); */
+  background-color: var(--mid-background);
 }
