@@ -1,12 +1,13 @@
 "use client";
+
 import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { useEffect, useState } from "react";
 import OneCallCurrentWeather from "./one-call-api/current-weather";
 import OneCallAdditionalInfo from "./one-call-api/additional-info";
 import OneCallForecast from "./one-call-api/forecast";
 import { geoCodingType } from "@/lib/types";
-import { frameClass } from "@/data/tw-styles";
 import DayTemperatures from "./one-call-api/day-temperatures";
+// import { frameClass } from "@/data/tw-styles";
 
 /**
  * @description retrieves weather info from Open Weather API
@@ -20,6 +21,7 @@ export default function OneCallAPIComponent({
   lat: number | null;
   lon: number | null;
 }) {
+  const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState(0);
   const [weather, setWeather] = useState<
@@ -100,11 +102,17 @@ export default function OneCallAPIComponent({
 
     fetchWeather();
     setIsLoading(false);
-  }, [city, gCity]);
+  }, [city, gCity, refreshKey]);
 
-  /* console.log(
-    `weather: ${weather?.current.temp}º, gCity: ${gCity}, city: ${city}`,
-  ); // debugging */
+  // invalidate cache and fetch data again =========================================================
+  const refreshCache = async () => {
+    try {
+      await fetch("/api/oneCall/", { method: "POST" });
+      setRefreshKey((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error refreshing data: ", error);
+    }
+  };
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -118,7 +126,12 @@ export default function OneCallAPIComponent({
 
   return (
     <>
-      <OneCallCurrentWeather city={city || gCity} weather={weather} />
+      <OneCallCurrentWeather
+        key={refreshKey}
+        city={city || gCity}
+        weather={weather}
+        refreshCache={refreshCache}
+      />
       <OneCallAdditionalInfo weather={weather} />
       <DayTemperatures day={weather.daily[selectedDay]} />
       <OneCallForecast

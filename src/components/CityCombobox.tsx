@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useDebouncedEffect } from "@/lib/hooks";
 import { inputClass } from "@/data/tw-styles";
 import { cityType, geoCodingType } from "@/lib/types";
@@ -24,8 +24,8 @@ export default function CityCombobox() {
   function handleSelect(city: cityType | null) {
     if (city) {
       params.set("city", `${city.name}, ${city.country}`);
-      city.lat && params.set("lat", city.lat.toString());
-      city.lon && params.set("lon", city.lon.toString());
+      if (city.lat) params.set("lat", city.lat.toString());
+      if (city.lon) params.set("lon", city.lon.toString());
       replace(`${path}?${params.toString()}`);
     } else {
       params.delete("city");
@@ -54,7 +54,7 @@ export default function CityCombobox() {
     onInputValueChange({ inputValue }) {
       setQuery(inputValue ?? "");
     },
-    onSelectedItemChange({ selectedItem, type }) {
+    onSelectedItemChange({ selectedItem /* , type */ }) {
       handleSelect(selectedItem);
       setHasSelectedItem(false);
 
@@ -71,48 +71,43 @@ export default function CityCombobox() {
   });
 
   // debounced useEffect for retrieving list of matching cities ====================================
-  useDebouncedEffect(
-    () => {
-      const fetchCities = async () => {
-        const uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
-        if (query.length < 3) {
-          setCities([]);
-          return;
-        }
-        try {
-          /* const { data }: { data: cityType[] } = await axios.get(uriQuery);
-          setCities(data); */
-          const response = await fetch(uriQuery);
-          const data: cityType[] = await response.json();
-          setCities(data);
+  const myEffect = useCallback(() => {
+    const fetchCities = async () => {
+      const uriQuery = `/api/cities?q=${encodeURIComponent(query.trim())}`;
+      if (query.length < 3) {
+        setCities([]);
+        return;
+      }
+      try {
+        const response = await fetch(uriQuery);
+        const data: cityType[] = await response.json();
+        setCities(data);
 
-          // if there is no match in cities.json try using geoCode =================================
-          if (!data.length && !cities.length) {
-            const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
-              query.trim(),
-            )}`;
-            const response = await fetch(geoCodeQuery);
-            const geoData: geoCodingType[] = await response.json();
+        // if there is no match in cities.json try using geoCode =================================
+        if (!data.length && !cities.length) {
+          const geoCodeQuery = `/api/geoCode?q=${encodeURIComponent(
+            query.trim(),
+          )}`;
+          const response = await fetch(geoCodeQuery);
+          const geoData: geoCodingType[] = await response.json();
 
-            const geoCities: cityType[] = geoData.map((city, i) => ({
-              id: i,
-              name: city.name,
-              country: city.country,
-              lat: city.lat,
-              lon: city.lon,
-            }));
-            setCities(geoCities);
-          } // endif
-        } catch {
-          setCities([]);
-        }
-      };
+          const geoCities: cityType[] = geoData.map((city, i) => ({
+            id: i,
+            name: city.name,
+            country: city.country,
+            lat: city.lat,
+            lon: city.lon,
+          }));
+          setCities(geoCities);
+        } // endif
+      } catch {
+        setCities([]);
+      }
+    };
 
-      fetchCities();
-    },
-    [query],
-    300,
-  ); // end of debounced effect
+    fetchCities();
+  }, [query]);
+  useDebouncedEffect(myEffect, [query], 300); // end of debounced effect
 
   return (
     <div className="w-[90%] sm:max-w-[400px]">

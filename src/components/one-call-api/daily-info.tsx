@@ -11,10 +11,10 @@ export default function DailyWeatherInfo({ day }: { day: DailyForecast }) {
   const tempMax = Math.round(day.temp.max || NaN);
   const windSpeedConversion = 3.6;
 
-  function formatPrecipitation(value?: number) {
+  function formatPrecipitation(value?: number): number {
     if (!value) return 0;
-    if (value > 999) return value;
-    return value.toPrecision(3);
+    if (value >= 1000) return value;
+    return parseFloat(value.toPrecision(3));
   }
 
   return (
@@ -51,7 +51,8 @@ export default function DailyWeatherInfo({ day }: { day: DailyForecast }) {
           <Image alt="umbrella" src={umbrella} width={50} />
         </div>
         <p className="w-3/4">
-          {formatPrecipitation(day.snow) || formatPrecipitation(day.rain) || 0} mm/h
+          {formatPrecipitation(day.snow) || formatPrecipitation(day.rain) || 0}{" "}
+          mm/h
         </p>
       </div>
     </div>

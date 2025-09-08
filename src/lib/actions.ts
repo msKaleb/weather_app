@@ -27,7 +27,7 @@ export async function fetchWeatherData(
 }
 
 /**
- * @todo change axios for standard fetch() (cache), not being used now
+ * @todo change axios for standard fetch() (cache) - VC API not being used now
  */
 export async function fetchVCWeatherData(
   city: string | undefined,

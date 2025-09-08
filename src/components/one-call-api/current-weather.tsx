@@ -6,27 +6,19 @@ import Clock from "@/components/clock";
 
 /**
  * @todo degrees should be selected by the user, now hardcoded to "°C"
- * @todo try to avoid refreshing the whole page in refreshData()
  */
 export default function OneCallCurrentWeather({
   weather,
   city,
+  refreshCache,
 }: {
   weather: OpenWeatherOneCallType | undefined | null;
   city: string | undefined | null;
+  refreshCache: () => void;
 }) {
   if (!weather) {
     return;
   }
-
-  const refreshData = async () => {
-    try {
-      await fetch("/api/oneCall/", { method: "POST" });
-      window.location.reload();
-    } catch (error) {
-      console.error("Error refreshing data: ", error);
-    }
-  };
 
   const currentWeather = weather?.current.weather[0];
   const cityDate = new Date(weather.current.dt * 1000);
@@ -51,7 +43,7 @@ export default function OneCallCurrentWeather({
       <div>
         <h1 className="text-3xl font-bold">
           {displayedCity}
-          <span className="font-normal"> ({countryName})</span>
+          {countryName && <span className="font-normal"> ({countryName})</span>}
         </h1>
         <br />
 
@@ -67,10 +59,13 @@ export default function OneCallCurrentWeather({
           <Clock timeZone={weather.timezone} locale="en-GB" />
           <div className="flex flex-col items-center gap-3 sm:flex-row">
             <p>
-              <span className="text-xl font-bold">Last updated: </span>
+              <span className="text-xl font-bold">Last checked: </span>
               {cityDate.toTimeString().split(" ")[0]}
             </p>
-            <RefreshCw className="hover:cursor-pointer" onClick={refreshData} />
+            <RefreshCw
+              className="hover:cursor-pointer"
+              onClick={refreshCache}
+            />
           </div>
         </div>
         <br />

@@ -14,7 +14,7 @@ export default function OneCallAdditionalInfo({
   weather: OpenWeatherOneCallType;
 }) {
   const { resolvedTheme } = useTheme();
-  const windSpeedConversion = 3.6;
+  const windSpeedConversion = 3.6; // wind_speed comes in metre/sec
 
   return (
     <div className={`${frameClass} m-4 grid grid-cols-2 gap-4 p-4 sm:flex sm:justify-around`}>

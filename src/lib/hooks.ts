@@ -15,5 +15,5 @@ export function useDebouncedEffect(
   useEffect(() => {
     const delayHandler = setTimeout(() => effect(), delay);
     return () => clearTimeout(delayHandler);
-  }, [...deps, delay]);
+  }, [...deps, delay, effect]);
 }
