@@ -133,8 +133,8 @@ export default function OneCallAPIComponent({
         refreshCache={refreshCache}
       />
       <OneCallAdditionalInfo weather={weather} />
-      <DayTemperatures day={weather.daily[selectedDay]} />
       <Alerts weather={weather} />
+      <DayTemperatures day={weather.daily[selectedDay]} />
       <OneCallForecast
         weather={weather}
         selectedDay={selectedDay}
