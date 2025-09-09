@@ -1,13 +1,13 @@
 "use client";
 
-import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
 import { useEffect, useState } from "react";
+import { OpenWeatherOneCallType } from "@/lib/openWeatherOneCallAPI";
+import { geoCodingType } from "@/lib/types";
 import OneCallCurrentWeather from "./one-call-api/current-weather";
 import OneCallAdditionalInfo from "./one-call-api/additional-info";
 import OneCallForecast from "./one-call-api/forecast";
-import { geoCodingType } from "@/lib/types";
 import DayTemperatures from "./one-call-api/day-temperatures";
-// import { frameClass } from "@/data/tw-styles";
+import Alerts from "./one-call-api/alerts";
 
 /**
  * @description retrieves weather info from Open Weather API
@@ -134,6 +134,7 @@ export default function OneCallAPIComponent({
       />
       <OneCallAdditionalInfo weather={weather} />
       <DayTemperatures day={weather.daily[selectedDay]} />
+      <Alerts weather={weather} />
       <OneCallForecast
         weather={weather}
         selectedDay={selectedDay}

@@ -55,8 +55,11 @@ export default function OneCallCurrentWeather({
           })}
         </h2>
         <div>
-          <span className="text-xl font-bold">{displayedCity} time: </span>
-          <Clock timeZone={weather.timezone} locale="en-GB" />
+          <div className="text-l">
+            <span className="font-bold">{displayedCity} local time: </span>
+            <Clock timeZone={weather.timezone} locale="en-GB" />
+          </div>
+
           <div className="flex flex-col items-center gap-3 sm:flex-row">
             <p>
               <span className="text-xl font-bold">Last checked: </span>
