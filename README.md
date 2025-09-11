@@ -1,7 +1,10 @@
 # Weather API Client
 
-This project idea taken from [roadmap.sh](https://roadmap.sh/projects/weather-app), which provides a simple client for accessing weather data using the [OpenWeather One Call API 3.0](https://openweathermap.org/api/one-call-3).
-
+This project idea is taken from [roadmap.sh](https://roadmap.sh/projects/weather-app).
+<br>
+It provides a simple client for accessing weather data using the [OpenWeather One Call API 3.0](https://openweathermap.org/api/one-call-3).
+<br>
+A deployed version in Vercel can be seen [here](https://weather-app-sjmikel.vercel.app/) 
 ## Features
 - Current weather conditions  
 - Daily forecasts  
