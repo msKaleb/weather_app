@@ -1,6 +1,6 @@
 # Weather API Client
 
-This project provides a simple client for accessing weather data using the [OpenWeather One Call API 3.0](https://openweathermap.org/api/one-call-3).
+This project idea taken from [roadmap.sh](https://roadmap.sh/projects/weather-app), which provides a simple client for accessing weather data using the [OpenWeather One Call API 3.0](https://openweathermap.org/api/one-call-3).
 
 ## Features
 - Current weather conditions  
