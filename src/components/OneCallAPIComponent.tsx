@@ -65,6 +65,7 @@ export default function OneCallAPIComponent({
       } catch (error) {
         if (error instanceof GeolocationPositionError) {
           console.warn(`Geolocation unavailable`);
+          setIsLoading(false);
         } else {
           console.error(`Error: ${error}`);
         }
@@ -86,6 +87,7 @@ export default function OneCallAPIComponent({
       // check for city not found
       if (city === null) {
         setWeather(null);
+        setIsLoading(false);
         return;
       }
       try {
@@ -94,14 +96,15 @@ export default function OneCallAPIComponent({
         const response = await fetch(uriQuery);
         const weather: OpenWeatherOneCallType = await response.json();
         setWeather(weather);
+        setIsLoading(false);
       } catch (error) {
         setWeather(null);
+        setIsLoading(false);
         console.error("Error on OneCallAPI: ", error); // debugging
       }
     };
 
     fetchWeather();
-    setIsLoading(false);
   }, [city, gCity, refreshKey]);
 
   // invalidate cache and fetch data again =========================================================
@@ -115,7 +118,7 @@ export default function OneCallAPIComponent({
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <span className="loader"></span>;
   } else if (weather === undefined) {
     return <p className="text-primary text-2xl">Enter a city name</p>;
   } else if (weather === null) {
