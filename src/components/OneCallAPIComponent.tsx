@@ -23,6 +23,7 @@ export default function OneCallAPIComponent({
 }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState(0);
   const [weather, setWeather] = useState<
     OpenWeatherOneCallType | undefined | null
@@ -44,7 +45,9 @@ export default function OneCallAPIComponent({
       // returns a promise with current location
       const getPosition = () =>
         new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 5000,
+          });
         });
 
       try {
@@ -64,7 +67,22 @@ export default function OneCallAPIComponent({
         });
       } catch (error) {
         if (error instanceof GeolocationPositionError) {
-          console.warn(`Geolocation unavailable`);
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              console.warn(`Geolocation unavailable.`);
+              setIsLoading(false);
+              break;
+            case error.TIMEOUT:
+              setError("Geolocation request timed out.");
+              setWeather(null);
+              break;
+            case error.POSITION_UNAVAILABLE:
+              setError("Geolocation unavailable.");
+              setWeather(null);
+              break;
+            default:
+              setError("Error fetching weather data.");
+          }
           setIsLoading(false);
         } else {
           console.error(`Error: ${error}`);
@@ -82,11 +100,14 @@ export default function OneCallAPIComponent({
       // check for geolocation
       if (!city && !gCity) {
         setWeather(city as null | undefined);
+        setIsLoading(false);
+        setError("Error fetching weather data.");
         return;
       }
       // check for city not found
       if (city === null) {
         setWeather(null);
+        setError("Error fetching weather data.");
         setIsLoading(false);
         return;
       }
@@ -100,7 +121,7 @@ export default function OneCallAPIComponent({
       } catch (error) {
         setWeather(null);
         setIsLoading(false);
-        console.error("Error on OneCallAPI: ", error); // debugging
+        // console.error("Error on OneCallAPI: ", error); // debugging
       }
     };
 
@@ -122,9 +143,7 @@ export default function OneCallAPIComponent({
   } else if (weather === undefined) {
     return <p className="text-primary text-2xl">Enter a city name</p>;
   } else if (weather === null) {
-    return (
-      <p className="text-destructive text-2xl">Error fetching weather data.</p>
-    );
+    return <p className="text-destructive text-2xl">{error}</p>;
   }
 
   return (
