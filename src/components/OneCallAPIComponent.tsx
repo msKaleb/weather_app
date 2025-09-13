@@ -23,6 +23,7 @@ export default function OneCallAPIComponent({
 }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [geoPermission, setGeoPermission] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState(0);
   const [weather, setWeather] = useState<
@@ -70,7 +71,8 @@ export default function OneCallAPIComponent({
           switch (error.code) {
             case error.PERMISSION_DENIED:
               console.warn(`Geolocation unavailable.`);
-              setIsLoading(false);
+              setGeoPermission(false);
+              // setIsLoading(false);
               break;
             case error.TIMEOUT:
               setError("Geolocation request timed out.");
@@ -100,8 +102,8 @@ export default function OneCallAPIComponent({
       // check for geolocation
       if (!city && !gCity) {
         setWeather(city as null | undefined);
-        setIsLoading(false);
         setError("Error fetching weather data.");
+        if (!geoPermission) setIsLoading(false);
         return;
       }
       // check for city not found
@@ -118,6 +120,7 @@ export default function OneCallAPIComponent({
         const weather: OpenWeatherOneCallType = await response.json();
         setWeather(weather);
         setIsLoading(false);
+        setError(null);
       } catch (error) {
         setWeather(null);
         setIsLoading(false);
