@@ -82,6 +82,7 @@ export default function OneCallAPIComponent({
       // check for geolocation
       if (!city && !gCity) {
         setWeather(city as null | undefined);
+        setIsLoading(false);
         return;
       }
       // check for city not found
